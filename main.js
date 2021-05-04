@@ -55,7 +55,6 @@ client.search(keyword)
         client.replyMessage(event.replyToken,{type:'image', originalContentUrl:images.url,previewImageUrl:images.thumbnail.url})
     });
 }}
-console.log(test)
 // listen on port
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
