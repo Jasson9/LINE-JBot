@@ -51,7 +51,7 @@ console.log(typeof event)
 
 if(event.message.text.includes(".picture")){ 
     var keyword = event.message.text.replace(".picture ","")
-client.search(keyword)
+GIMG.search(keyword)
     .then(images => {
         client.replyMessage(event.replyToken,{type:'image', originalContentUrl:images.url,previewImageUrl:images.thumbnail.url})
     });
