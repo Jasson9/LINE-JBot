@@ -31,9 +31,13 @@ app.post('/webhook', line.middleware(config), (req, res) => {
     .all(req.body.events.map(handleEvent))
     .then((result) => res.json(result));
 });
-
+var msg
+setInterval(() => {
+    console.log(msg)
+}, 2000);
 // event handler
-function handleEvent(event) {
+function handleEvent(event) {msg=event
+    return
   if (event.type !== 'message' || event.message.type !== 'text') {
     // ignore non-text-message event
     return Promise.resolve(null);
@@ -41,13 +45,14 @@ function handleEvent(event) {
 
   // create a echoing text message
   if(event.message.text=="echo"){
-  var echo = { type: 'text', text: event.message.text };
+  var echo = { type: 'text', text: "echo" };
   
   // use reply API
   return client.replyMessage(event.replyToken, echo);
   }
-  
- 
+
+
+
 
 if(event.message.text.includes(".picture")){ 
     var keyword = event.message.text.replace(".picture ","")
@@ -56,7 +61,6 @@ client.search(keyword)
         client.replyMessage(event.replyToken,{type:'image', originalContentUrl:images.url,previewImageUrl:images.thumbnail.url})
     });
 }}
-
 // listen on port
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
