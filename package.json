@@ -1,0 +1,23 @@
+{
+  "name": "line-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jasson9/LINE-Bot.git"
+  },
+  "author": "JZ9",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jasson9/LINE-Bot/issues"
+  },
+  "homepage": "https://github.com/Jasson9/LINE-Bot#readme",
+  "dependencies": {
+    "curl": "^0.1.4",
+    "request": "^2.88.2"
+  }
+}
