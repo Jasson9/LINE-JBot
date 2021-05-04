@@ -1,8 +1,9 @@
 'use strict';
-
+const GoogleImages = require('google-images');
 const line = require('@line/bot-sdk');
 const express = require('express');
 
+const GIMG = new GoogleImages('9158f798cdfa53799', 'AIzaSyAG6gTt_12cJjlqBUH6-bq8PxVMGkEG69I');
 const defaultAccessToken = '***********************';
 const defaultSecret = '***********************';
 
@@ -39,11 +40,22 @@ function handleEvent(event) {
   }
 
   // create a echoing text message
-  const echo = { type: 'text', text: event.message.text };
-
+  if(event.message.text=="echo"){
+  var echo = { type: 'text', text: event.message.text };
+  
   // use reply API
   return client.replyMessage(event.replyToken, echo);
-}
+  }
+  
+ 
+
+if(event.message.text==".picture "){ 
+    var keyword = event.message.text.replace(".picture ","")
+client.search(keyword)
+    .then(images => {
+        client.replyMessage(event.replyToken,{type:'image', originalContentUrl:images.url,previewImageUrl:images.thumbnail.url})
+    });
+}}
 
 // listen on port
 const port = process.env.PORT || 3000;

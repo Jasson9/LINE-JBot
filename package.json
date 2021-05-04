@@ -12,6 +12,7 @@
   "crypto": "^1.0.1",
   "curl": "^0.1.4",
   "express": "^4.17.1",
+  "google-images": "^2.1.0",
   "got": "^9.6.0",
   "node-fetch": "^2.6.1"
  }
