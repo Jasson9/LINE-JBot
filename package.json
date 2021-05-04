@@ -1,25 +1,17 @@
 {
-  "name": "line-bot",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Jasson9/LINE-Bot.git"
-  },
-  "author": "JZ9",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Jasson9/LINE-Bot/issues"
-  },
-  "homepage": "https://github.com/Jasson9/LINE-Bot#readme",
-  "dependencies": {
-    "@line/bot-sdk": "^7.3.0",
-    "curl": "^0.1.4",
-    "express": "^4.17.1",
-    "request": "^2.88.2"
-  }
+ "name": "Jbot-LINE",
+ "version": "1.0.0",
+ "description": "",
+ "main": "main.js",
+ "scripts": {
+  "start": "node main.js",
+  "test": "echo \"Error: no test specified\" && exit 1"
+ },
+ "dependencies": {
+  "@line/bot-sdk": "^7.2.0",
+  "crypto": "^1.0.1",
+  "curl": "^0.1.4",
+  "got": "^9.6.0",
+  "node-fetch": "^2.6.1"
+ }
 }
