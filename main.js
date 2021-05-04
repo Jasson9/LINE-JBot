@@ -49,7 +49,7 @@ function handleEvent(event) {
   
  
 
-if(event.message.text==".picture "){ 
+if(event.message.text.includes(".picture")){ 
     var keyword = event.message.text.replace(".picture ","")
 client.search(keyword)
     .then(images => {
