@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/Jasson9/LINE-Bot#readme",
   "dependencies": {
+    "@line/bot-sdk": "^7.3.0",
     "curl": "^0.1.4",
+    "express": "^4.17.1",
     "request": "^2.88.2"
   }
 }
