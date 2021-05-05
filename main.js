@@ -67,7 +67,7 @@ var event=JSON.parse(JSON.stringify(data))
           if(!args[0]){
             client.replyMessage(event.replyToken,{type:'text',text:"no message specified"});return
           }
-          client.replyMessage(event.replyToken,{type:'text',text:args[0]});break;
+          client.replyMessage(event.replyToken,{type:'text',text:args.join(" ")});break;
     default:
      client.replyMessage(event.replyToken,{type:'text',text:`no command use ${prefix}help for more info`})
   }
