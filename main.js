@@ -45,15 +45,15 @@ var event=JSON.parse(JSON.stringify(data))
     return Promise.resolve(null);
   }
   var args = event.message.text.split(" ")
-  console.log(args)
   var cmd = args.shift().replace(prefix,"")
-  
+  console.log(args)
+  console.log(cmd)
   switch(cmd){
     case "help":
      client.replyMessage(event.replyToken,{type:'text',text: `available commands: \n ${prefix}help:show this message \n ${prefix}picture:search picture using google search engine \n ${prefix}echo: reply back the message \n \n creator:JZ9`})
       break;
       case "picture":
-        if(!args[0].length){client.replyMessage(event.replyToken,{type:'text',text:"no keyword"});return}
+        if(!args[0]){client.replyMessage(event.replyToken,{type:'text',text:"no keyword"});return}
         try{
           GIMG.search(args[0].then(images => {
           if(!images){client.replyMessage(event.replyToken,{type:'text',text:"request has reached the limit"});return}
@@ -64,7 +64,7 @@ var event=JSON.parse(JSON.stringify(data))
           console.log(err)}}
         break;
       case "echo":
-          if(!args[0].length){
+          if(!args[0]){
             client.replyMessage(event.replyToken,{type:'text',text:"no message specified"});return
           }
           client.replyMessage(event.replyToken,{type:'text',text:args[0]});break;
