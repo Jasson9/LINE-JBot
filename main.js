@@ -11,7 +11,7 @@ const defaultSecret = '***********************';
 const PREFIX =process.env.PREFIX||"."
 var chatbot ="off"
 const botname =process.env.BOTNAME||"JBot"
-const CBAuth = process.env.CBAUTH||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
+const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
 
 // create LINE SDK config from env variables
 const config = {
@@ -52,10 +52,11 @@ var event=JSON.parse(JSON.stringify(data))
   }
 
   var args = event.message.text.split(" ")
-  var cmd = args.shift().replace(PREFIX,"")
+  var cmd = args.shift().replace(PREFIX,"").toLowerCase()
   if(!event.message.text.slice(0).includes(`${PREFIX}`)){//if the message has prefix then use command instead of chatbot
   if(chatbot=="on"){
-    //if(!event.message.source.userId){return} //if the message have userId then use the chatbot
+    //if(!event.message.source.userId){return} 
+    //if the message have userId then use the chatbot
         
     fetch(`https://api.snowflakedev.xyz/api/chatbot?message=${encodeURIComponent(event.message.text)}&name=${botname}`, {
         headers: {
@@ -94,7 +95,7 @@ var event=JSON.parse(JSON.stringify(data))
             client.replyMessage(event.replyToken,{type:'text',text:"no message specified"});return
           }
           client.replyMessage(event.replyToken,{type:'text',text:args.join(" ")});break;
-      case "invite":
+      case "invite": //add invite feature
         client.replyMessage(event.replyToken,{type:'text',text:`To invite/add this bot use this url: \n https://line.me/R/ti/p/%40${botId}`});break;
 
       case "chatbot": //switch on or off for the AI chatbot
