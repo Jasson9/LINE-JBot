@@ -56,7 +56,8 @@ var event=JSON.parse(JSON.stringify(data))
 
   var args = event.message.text.split(" ")
   var cmd = args.shift().replace(PREFIX,"").toLowerCase()
-  if(!event.message.text.slice(0).includes(`${PREFIX}`)){//if the message has prefix then use command instead of chatbot
+
+  if(!event.message.text.slice(0).includes(`${PREFIX}`)){cmd=undefined//if the message has no prefix then use the chatbot if on and return no command
   if(chatbot=="on"){
     //if(!event.message.source.userId){return} 
     //if the message have userId then use the chatbot
