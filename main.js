@@ -53,7 +53,8 @@ if(event.message.text.includes(".picture")){
     var keyword = event.message.text.replace(".picture ","")
 GIMG.search(keyword)
     .then(images => {
-        client.replyMessage(event.replyToken,{type:'image', originalContentUrl:images.url,previewImageUrl:images.thumbnail.url})
+      
+        client.replyMessage(event.replyToken,{type:'image', originalContentUrl:images[0].url,previewImageUrl:images[0].thumbnail.url})
     });
 }}
 // listen on port 3000
