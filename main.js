@@ -6,6 +6,7 @@ const fetch = require("node-fetch").default;
 const GIMG = new GoogleImages('9158f798cdfa53799', 'AIzaSyAG6gTt_12cJjlqBUH6-bq8PxVMGkEG69I');
 const defaultAccessToken = '***********************';
 const defaultSecret = '***********************';
+const path = require('path')
 
 //settings
 const PREFIX =process.env.PREFIX||"."
@@ -13,7 +14,7 @@ var chatbot ="off"
 const botname =process.env.BOTNAME||"JBot"
 const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
 
-// create LINE SDK config from env variables
+// LINE SDK config from env variables
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN || defaultAccessToken,
   channelSecret: process.env.CHANNEL_SECRET || defaultSecret,
@@ -27,7 +28,7 @@ const client = new line.Client(config);
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.sendFile(path.join(__dirname,'/index.html'));
 });
 
 // register a webhook handler with middleware
@@ -37,6 +38,8 @@ app.post('/webhook', line.middleware(config), (req, res) => {
     .all(req.body.events.map(handleEvent))
     .then((result) => res.json(result));
 });
+
+//get botId
 var botId
 fetch(`https://api.line.me/v2/bot/info`,{
   headers:{Authorization: `Bearer ${config.channelAccessToken}`
