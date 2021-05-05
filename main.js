@@ -45,8 +45,9 @@ var event=JSON.parse(JSON.stringify(data))
     return Promise.resolve(null);
   }
   var args = event.message.text.split(" ")
+  console.log(args)
   var cmd = args.shift().replace(prefix,"")
-  // create a echoing text message
+  
   switch(cmd){
     case "help":
      client.replyMessage(event.replyToken,{type:'text',text: `available commands: \n ${prefix}help:show this message \n ${prefix}picture:search picture using google search engine \n ${prefix}echo: reply back the message \n \n creator:JZ9`})
