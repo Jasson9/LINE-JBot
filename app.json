@@ -1,0 +1,29 @@
+{
+    "name": "LINE-JBot",
+    "description": "A simple LINE bot using Node.js",
+    "repository": "https://github.com/Jasson9/LINE-Bot/",
+    "keywords": ["LINE", "Bot", "Node.js","Javascript","JBot","JZ9"],
+    "buildpacks": [{"url":"heroku/node.js"}],
+    "env":{
+        "PREFIX":{
+            "description":"symbol to initiate the bot command. if leaved blank it will use point(.) as the prefix",
+            "value":"."   
+        },
+        "BOTNAME":{
+            "description":"name of your bot",
+            "required":"true"
+        },
+        "CHANNEL_ACCESS_TOKEN":{
+            "description":"LINE channel access token for the bot",
+            "required":"true"
+        },
+        "CHANNEL_SECRET":{
+            "description":"LINE Channel secret code for the bot",
+            "required":"true"
+        },
+        "SNOWFLAKE_STUDIO_API_KEY":{
+            "decription":"snowflake studio API key for AI chatbot feature. you can leave this option or use your own key"
+        }
+    }
+    
+  }
