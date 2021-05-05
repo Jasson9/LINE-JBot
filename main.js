@@ -36,7 +36,7 @@ app.post('/webhook', line.middleware(config), (req, res) => {
     .then((result) => res.json(result));
 });
 
-// event handler
+// event handlers
 function handleEvent(data) {
 var event=JSON.parse(JSON.stringify(data))
 
@@ -44,7 +44,7 @@ var event=JSON.parse(JSON.stringify(data))
     // ignore non-text-message event
     return Promise.resolve(null);
   }
-  var args = event.split(" ")
+  var args = event.message.text.split(" ")
   var cmd = args.shift().replace(prefix,"")
   // create a echoing text message
   switch(cmd){
