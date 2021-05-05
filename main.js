@@ -31,11 +31,13 @@ app.post('/webhook', line.middleware(config), (req, res) => {
     .all(req.body.events.map(handleEvent))
     .then((result) => res.json(result));
 });
-
+//var msg =".picture test"
+//var args = [].slice.call(msg);
+//console.log(args)
 // event handler
 function handleEvent(data) {
 var event=JSON.parse(JSON.stringify(data))
-console.log(typeof event)
+
   if (event.type !== 'message' || event.message.type !== 'text') {
     // ignore non-text-message event
     return Promise.resolve(null);
@@ -48,12 +50,18 @@ console.log(typeof event)
   // use reply API
   return client.replyMessage(event.replyToken, echo);
   }
-
+  if(event.message.text.includes(".pic")){ 
+    var keyword = event.message.text.replace(".pic ","")
+GIMG.search(keyword)
+    .then(images => {
+      if(!images){client.replyMessage(event.replyToken,{type:'text',text:"request has reached the limit"});return}
+        client.replyMessage(event.replyToken,{type:'image', originalContentUrl:images[0].url,previewImageUrl:images[0].thumbnail.url})
+    });
+}
 if(event.message.text.includes(".picture")){ 
     var keyword = event.message.text.replace(".picture ","")
 GIMG.search(keyword)
     .then(images => {
-      
         client.replyMessage(event.replyToken,{type:'image', originalContentUrl:images[0].url,previewImageUrl:images[0].thumbnail.url})
     });
 }}
