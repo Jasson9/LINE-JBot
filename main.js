@@ -2,7 +2,7 @@
 const GoogleImages = require('google-images');
 const line = require('@line/bot-sdk');
 const express = require('express');
-
+const fetch = require("node-fetch").default;    
 const GIMG = new GoogleImages('9158f798cdfa53799', 'AIzaSyAG6gTt_12cJjlqBUH6-bq8PxVMGkEG69I');
 const defaultAccessToken = '***********************';
 const defaultSecret = '***********************';
@@ -37,6 +37,10 @@ app.post('/webhook', line.middleware(config), (req, res) => {
     .all(req.body.events.map(handleEvent))
     .then((result) => res.json(result));
 });
+var botId
+fetch(`https://api.line.me/v2/bot/info`,{
+  headers:{Authorization: `Bearer ${config.channelAccessToken}`
+}}).then(res=>res.json()).then(data=>{data=JSON.parse(JSON.stringify(data.basicId).replace("@","")),botId=data})
 
 // event handlers
 function handleEvent(data) {
@@ -46,13 +50,13 @@ var event=JSON.parse(JSON.stringify(data))
     // ignore non-text-message event
     return Promise.resolve(null);
   }
-  
+
   var args = event.message.text.split(" ")
   var cmd = args.shift().replace(PREFIX,"")
   if(!event.message.text.slice(0).includes(`${PREFIX}`)){//if the message has prefix then use command instead of chatbot
   if(chatbot=="on"){
     //if(!event.message.source.userId){return} //if the message have userId then use the chatbot
-    const fetch = require("node-fetch").default;         
+        
     fetch(`https://api.snowflakedev.xyz/api/chatbot?message=${encodeURIComponent(event.message.text)}&name=${botname}`, {
         headers: {
             "Authorization": CBAuth        
@@ -90,6 +94,8 @@ var event=JSON.parse(JSON.stringify(data))
             client.replyMessage(event.replyToken,{type:'text',text:"no message specified"});return
           }
           client.replyMessage(event.replyToken,{type:'text',text:args.join(" ")});break;
+      case "invite":
+        client.replyMessage(event.replyToken,{type:'text',text:`To invite/add this bot use this url: \n https://line.me/R/ti/p/%40${botId}`});break;
 
       case "chatbot": //switch on or off for the AI chatbot
         switch(args[0]){
