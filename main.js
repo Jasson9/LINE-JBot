@@ -51,7 +51,7 @@ var event=JSON.parse(JSON.stringify(data))
   var cmd = args.shift().replace(PREFIX,"")
   if(!event.message.text.slice(0).includes(`${PREFIX}`)){//if the message has prefix then use command instead of chatbot
   if(chatbot=="on"){
-    if(!event.message.source.userId){return} //if the message have userId then use the chatbot
+    //if(!event.message.source.userId){return} //if the message have userId then use the chatbot
     const fetch = require("node-fetch").default;         
     fetch(`https://api.snowflakedev.xyz/api/chatbot?message=${encodeURIComponent(event.message.text)}&name=${botname}`, {
         headers: {
