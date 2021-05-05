@@ -8,27 +8,27 @@
         "PREFIX":{
             "description":"symbol to initiate the bot command. if leaved blank it will use point(.) as the prefix",
             "value":".",
-            "required":"false"   
+            "required":false   
         },
         "BOTNAME":{
             "description":"name of your bot",
-            "required":"true"
+            "required":true
         },
         "CHANNEL_ACCESS_TOKEN":{
             "description":"LINE channel access token for the bot",
-            "required":"true"
+            "required":true
         },
         "CHANNEL_SECRET":{
             "description":"LINE Channel secret code for the bot",
-            "required":"true"
+            "required":true
         },
         "SNOWFLAKE_STUDIO_API_KEY":{
             "decription":"snowflake studio API key for AI chatbot feature. you can leave this option or use your own key",
-            "required":"false"
+            "required":false
         },
         "CSE_ID":{
             "description":"the CSE(custom search engine) ID for image search, you can leave it or use your own CSE",
-            "required":"false"
+            "required":false
         },
         "G_API_KEY":{
             "description":"google API Key to trigger the CSE API, you can leave it or use your own API key but remember the limitation is 100 requests per day",
