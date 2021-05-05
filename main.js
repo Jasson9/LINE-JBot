@@ -8,7 +8,7 @@ const defaultAccessToken = '***********************';
 const defaultSecret = '***********************';
 
 //settings
-const prefix =process.env.PREFIX||"."
+const PREFIX =process.env.PREFIX||"."
 var chatbot ="off"
 const botname =process.env.BOTNAME||"JBot"
 const CBAuth = process.env.CBAUTH||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
@@ -48,7 +48,7 @@ var event=JSON.parse(JSON.stringify(data))
   }
   
   var args = event.message.text.split(" ")
-  var cmd = args.shift().replace(prefix,"")
+  var cmd = args.shift().replace(PREFIX,"")
   if(!event.message.text.slice(0).includes(`${PREFIX}`)){//if the message has prefix then use command instead of chatbot
   if(chatbot=="on"){
     if(!event.message.source.userId){return} //if the message have userId then use the chatbot
@@ -70,7 +70,7 @@ var event=JSON.parse(JSON.stringify(data))
   switch(cmd){
 
     case "help": //show help message
-     client.replyMessage(event.replyToken,{type:'text',text: `available commands: \n ${prefix}help: show this message \n ${prefix}picture: search picture using google search engine \n ${prefix}echo: reply back the message \n \n creator:JZ9`})
+     client.replyMessage(event.replyToken,{type:'text',text: `available commands: \n ${PREFIX}help: show this message \n ${PREFIX}picture: search picture using google search engine \n ${PREFIX}echo: reply back the message \n \n creator:JZ9`})
       break;
 
       case "picture": //picture search feature
