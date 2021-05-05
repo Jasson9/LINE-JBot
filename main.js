@@ -55,10 +55,10 @@ var event=JSON.parse(JSON.stringify(data))
       case "picture":
         if(!args[0]){client.replyMessage(event.replyToken,{type:'text',text:"no keyword"});return}
         try{
-          GIMG.search(args[0].then(images => {
+          GIMG.search(args[0]).then(images => {
           if(!images){client.replyMessage(event.replyToken,{type:'text',text:"request has reached the limit"});return}
             client.replyMessage(event.replyToken,{type:'image', originalContentUrl:images[0].url,previewImageUrl:images[0].thumbnail.url})
-        }))    
+        })   
         }
         catch(err){if(err){
           console.log(err)}}
@@ -68,8 +68,6 @@ var event=JSON.parse(JSON.stringify(data))
             client.replyMessage(event.replyToken,{type:'text',text:"no message specified"});return
           }
           client.replyMessage(event.replyToken,{type:'text',text:args.join(" ")});break;
-    default:
-     client.replyMessage(event.replyToken,{type:'text',text:`no command use ${prefix}help for more info`})
   }
 }
 // listen on port 3000
