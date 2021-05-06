@@ -11,7 +11,7 @@ const path = require('path')
 //settings
 const PREFIX =process.env.PREFIX||"."
 var chatbot ="off"
-const botname =process.env.BOTNAME||"JBot"
+const botname =process.env.BOTNAME
 const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
 
 // LINE SDK config from env variables
@@ -79,7 +79,7 @@ var event=JSON.parse(JSON.stringify(data))
   switch(cmd){
 
     case "help": //show help message
-     client.replyMessage(event.replyToken,{type:'text',text: `available commands: \n ${PREFIX}help: show this message \n ${PREFIX}picture: search picture using google search engine \n ${PREFIX}echo: reply back the message \n \n creator:JZ9`})
+     client.replyMessage(event.replyToken,{type:'text',text: `available commands: \n ${PREFIX}help: show this message \n ${PREFIX}picture: search picture using google search engine \n ${PREFIX}echo : reply back the message after the command \n ${PREFIX}chatbot : to see chatbot status or turn on or off \n ${PREFIX}invite : to show the invite link of the bot\n \n creator:JZ9`})
       break;
 
       case "picture": //picture search feature
@@ -110,7 +110,7 @@ var event=JSON.parse(JSON.stringify(data))
             break;
           case "on":
             chatbot="on"
-            client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is now ${chatbot}`});
+            client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is now ${chatbot} \n don't expect the responses make sense`});
             break;
           default : client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is ${chatbot}`});return
         }

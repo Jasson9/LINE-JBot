@@ -23,7 +23,7 @@
             "required":true
         },
         "SNOWFLAKE_STUDIO_API_KEY":{
-            "decription":"snowflake studio API key for AI chatbot feature. you can leave this option or use your own key",
+            "description":"snowflake studio API key for AI chatbot feature. you can leave this option or use your own key",
             "required":false
         },
         "CSE_ID":{
@@ -31,7 +31,7 @@
             "required":false
         },
         "G_API_KEY":{
-            "description":"google API Key to trigger the CSE API, you can leave it or use your own API key but remember the limitation is 100 requests per day",
+            "description":"google API Key to trigger the CSE API, you can leave it or use your own API key but remember the limitation is 100 shared requests per day",
             "required":false
         }
     }
