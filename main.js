@@ -52,16 +52,16 @@ var event=JSON.parse(JSON.stringify(data))
 
 //hangman game
 function hangmangame(Token,GID,word){
-  var msg = {
-    type: 'text',
-    text: `guess this word \n ${show}`
-  };
   var order =[]
   var i =0
   while (i<=word.length) {
   order.push(Math.floor(Math.random()*word.length)),i++
   };
   var show = underscore.repeat(word.length).split('')
+  var msg = {
+    type: 'text',
+    text: `guess this word \n ${show}`
+  };
   show[order[0]]=word[order[0]] 
   console.log(Token,GID,word, show, order)
    client.replyMessage(Token,msg)
@@ -74,7 +74,7 @@ function hangmangame(Token,GID,word){
      client.pushMessage(GID,msg)
   },45000)
   setTimeout(()=>{
-     client.pushMessage(GID,msg)
+     client.pushMessage(GID,{type:'text',text:`the answer is ${word}`})
     hangman.splice(hangman.indexOf(GID),1);
     return
   },15000);
