@@ -51,8 +51,7 @@ function handleEvent(data) {
 var event=JSON.parse(JSON.stringify(data))
 
 //hangman game
-async function hangmangame(Token,GID,word){
-  try{
+function hangmangame(Token,GID,word){
   var order =[]
   var i =0
   while (i<=word.length) {
@@ -61,16 +60,16 @@ async function hangmangame(Token,GID,word){
   var show = underscore.repeat(word.length).split('')
   show[order[0]]=word[order[0]] 
   console.log(Token,GID,word, show)
-  await client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}` })
-  await setTimeout(() => {
+   client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}` })
+   setTimeout(() => {
     show =show.replaceAt(show[order[1]]=word[order[1]] )
     client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
   }, 30000)
-  await setTimeout(()=>{
+   setTimeout(()=>{
     show =show.replaceAt(show[order[2]]=word[order[2]] )
      client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
   },45000)
- await setTimeout(()=>{
+  setTimeout(()=>{
      client.replyMessage(Token,{type:'text',text:`the final answer is \n ${word}`})
     hangman.splice(hangman.indexOf(GID),1);
     return
@@ -80,7 +79,6 @@ async function hangmangame(Token,GID,word){
  //   client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${word}`});
  //   return            
  // }else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}
-}catch(error){console.log(error)}
 }
 
   if (event.type !== 'message' || event.message.type !== 'text') {
