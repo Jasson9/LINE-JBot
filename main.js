@@ -166,7 +166,7 @@ default:
   if(hangman.includes(event.source.groupId)){
     if(event.message.text==words[wordId]){
       client.pushMessage(event.source.groupId,{type:'text',text:`the answer is correct \n ${words[wordId]}`});
-      hangman.splice(hangman.indexOf(GID),1)
+      hangman.splice(hangman.indexOf(event.source.groupId),1)
       answer="true"            
       return
      }else{client.pushMessage(event.source.groupId,{type:'text',text:`incorrect!`});}
