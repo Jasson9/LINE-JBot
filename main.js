@@ -14,10 +14,11 @@ const botname =process.env.BOTNAME
 const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
 var hangman =[]
 var words=["hello","test","aloha","dictionary","teams","pradah"]
+var answer = "false"
 var underscore="-"
 // LINE SDK config from env variables
 const config = {
-  channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN || defaultAccessToken,
+  channelAccessToken: "Uo3gYpv3LTd/nKHdYIz1/gqzKxk/rddQi9W+d4bCCG6z+1PIae8euhOo8WGome1shyh/wD9Brn8YnzQtDp5uekxl5H1hSWHW2ot3dbhfyK0h1cfiAatZfO1wNYq44T1jsbO/IYVyLuea4bfd38+oAQdB04t89/1O/w1cDnyilFU="||process.env.CHANNEL_ACCESS_TOKEN || defaultAccessToken,
   channelSecret: process.env.CHANNEL_SECRET || defaultSecret,
 };
 // create LINE SDK client
@@ -60,26 +61,21 @@ function hangmangame(Token,GID,word){
   var show = underscore.repeat(word.length).split('')
   show[order[0]]=word[order[0]] 
   console.log(Token,GID,word, show, order)
-   client.replyMessage(Token,{type:"text",text:`guess this word \n ${show}`})
-   if(event.message.text.toLowerCase==word){
-    client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${words[wordId]}`});
-    hangman.splice(hangman.indexOf(GID),1);            
-    return
-   }
+   client.replyMessage(Token,{type:"text",text:`guess this word \n ${show.join('')}`})
    setTimeout(() => {
     show[order[1]]=word[order[1]] 
-    client.pushMessage(GID,{type:"text",text:`guess this word \n ${show}`})
+    client.pushMessage(GID,{type:"text",text:`guess this word \n ${show.join('')}`})
   }, 15000)
    setTimeout(()=>{
     show[order[2]]=word[order[2]] 
-     client.pushMessage(GID,{type:"text",text:`guess this word \n ${show}`})
+     client.pushMessage(GID,{type:"text",text:`guess this word \n ${show.join('')}`})
   },45000)
   setTimeout(()=>{
      client.pushMessage(GID,{type:'text',text:`the answer is ${word}`})
     hangman.splice(hangman.indexOf(GID),1);
     return
   },90000);
-  
+  while(answer='false'){}return
   //await event.message
   //if(event.message.text==words[wordId]){
  //   client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${word}`});
@@ -164,8 +160,15 @@ function hangmangame(Token,GID,word){
 
 
     
-      }  
-   
+      }     
+      if(hangman.includes(event.source.groupId)){
+      if(event.message.text.toLowerCase==words){
+        client.pushMessage(event.source.groupId,{type:'text',text:`the answer is correct \n ${words[wordId]}`});
+        hangman.splice(hangman.indexOf(GID),1);
+        answer="true"            
+        return
+       }else{client.pushMessage(event.source.groupId,{type:'text',text:`incorrect!`});}
+      }
        
         
       
