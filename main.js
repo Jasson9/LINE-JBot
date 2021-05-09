@@ -160,7 +160,7 @@ async function hangmangame(Token,GID,word){
         case "hangman":
         if(hangman.includes(event.source.groupId)){return};
         hangman.push(event.source.groupId)
-        wordId=Math.floor(Math.random()*words.length+1)
+        wordId=Math.floor(Math.random()*words.length)
         console.log(wordId)
         hangmangame(event.replyToken,event.source.groupId,words[wordId])
         ;break;
