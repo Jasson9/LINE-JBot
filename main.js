@@ -52,6 +52,10 @@ var event=JSON.parse(JSON.stringify(data))
 
 //hangman game
 function hangmangame(Token,GID,word){
+  var msg = {
+    type: 'text',
+    text: `guess this word \n ${show}`
+  };
   var order =[]
   var i =0
   while (i<=word.length) {
@@ -60,17 +64,17 @@ function hangmangame(Token,GID,word){
   var show = underscore.repeat(word.length).split('')
   show[order[0]]=word[order[0]] 
   console.log(Token,GID,word, show, order)
-   client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}` })
+   client.replyMessage(Token,msg)
    setTimeout(() => {
     show[order[1]]=word[order[1]] 
-    client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
+    client.pushMessage(GID,msg)
   }, 30000)
    setTimeout(()=>{
     show[order[2]]=word[order[2]] 
-     client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
+     client.pushMessage(GID,msg)
   },45000)
   setTimeout(()=>{
-     client.replyMessage(Token,{type:'text',text:`the final answer is \n ${word}`})
+     client.pushMessage(GID,msg)
     hangman.splice(hangman.indexOf(GID),1);
     return
   },15000);
