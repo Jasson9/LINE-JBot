@@ -67,17 +67,18 @@ async function hangmangame(Token,GID,word){
   };
   var show = underscore.repeat(word.length)
   show =show.replaceAt(order[0],word[order[0]])
-  client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}` })
-  setTimeout(() => {
+  console.log(Token,GID,word)
+  await client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}` })
+  await setTimeout(() => {
     show =show.replaceAt(order[1],word[order[1]])
     client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
   }, 30000);
-  setTimeout(()=>{
+  await setTimeout(()=>{
     show =show.replaceAt(order[2],word[order[2]])
-    client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
+     client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
   },45000);
-  setTimeout(()=>{
-    client.replyMessage(Token,{type:'text',text:`the final answer is \n ${word}`})
+  await setTimeout(()=>{
+     client.replyMessage(Token,{type:'text',text:`the final answer is \n ${word}`})
     hangman.splice(hangman.indexOf(GID),1);
     return
   },15000);
