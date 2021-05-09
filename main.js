@@ -58,20 +58,16 @@ function hangmangame(Token,GID,word){
   order.push(Math.floor(Math.random()*word.length)),i++
   };
   var show = underscore.repeat(word.length).split('')
-  var msg = {
-    type: 'text',
-    text: `guess this word \n ${show}`
-  };
   show[order[0]]=word[order[0]] 
   console.log(Token,GID,word, show, order)
-   client.replyMessage(Token,msg)
+   client.replyMessage(Token,{type:"text",text:`guess this word \n ${show}`})
    setTimeout(() => {
     show[order[1]]=word[order[1]] 
-    client.pushMessage(GID,msg)
+    client.pushMessage(GID,{type:"text",text:`guess this word \n ${show}`})
   }, 30000)
    setTimeout(()=>{
     show[order[2]]=word[order[2]] 
-     client.pushMessage(GID,msg)
+     client.pushMessage(GID,{type:"text",text:`guess this word \n ${show}`})
   },45000)
   setTimeout(()=>{
      client.pushMessage(GID,{type:'text',text:`the answer is ${word}`})
