@@ -9,9 +9,11 @@
  },
  "dependencies": {
   "@line/bot-sdk": "^7.2.0",
+  "cheerio": "^1.0.0-rc.6",
   "crypto": "^1.0.1",
   "curl": "^0.1.4",
   "express": "^4.17.1",
+  "google-image-search": "^0.1.0",
   "google-images": "^2.1.0",
   "got": "^9.6.0",
   "node-fetch": "^2.6.1",

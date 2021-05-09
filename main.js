@@ -6,14 +6,16 @@ const fetch = require("node-fetch").default;
 const GIMG = new GoogleImages(process.env.CSE_ID||'9158f798cdfa53799', process.env.G_API_KEY||'AIzaSyAG6gTt_12cJjlqBUH6-bq8PxVMGkEG69I');
 const defaultAccessToken = '***********************';
 const defaultSecret = '***********************';
-const path = require('path')
 
+const path = require('path');
 //settings
 const PREFIX =process.env.PREFIX||"."
 var chatbot ="off"
 const botname =process.env.BOTNAME
 const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
-
+var hangman =[]
+var words=["hello","test","aloha"]
+var underscore="-"
 // LINE SDK config from env variables
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN || defaultAccessToken,
@@ -23,6 +25,7 @@ const config = {
 // create LINE SDK client
 const client = new line.Client(config);
 
+var wordId
 // create Express app
 // about Express itself: https://expressjs.com/
 const app = express();
@@ -38,16 +41,52 @@ app.post('/webhook', line.middleware(config), (req, res) => {
     .all(req.body.events.map(handleEvent))
     .then((result) => res.json(result));
 });
+String.prototype.replaceAt = function(index, replacement) {
+  if (index >= this.length) {
+      return this.valueOf();
+  }
+
+  return this.substring(0, index) + replacement + this.substring(index + 1);
+}
 
 //get botId
 var botId
 fetch(`https://api.line.me/v2/bot/info`,{
   headers:{Authorization: `Bearer ${config.channelAccessToken}`
 }}).then(res=>res.json()).then(data=>{data=JSON.parse(JSON.stringify(data.basicId).replace("@","")),botId=data})
-
 // event handlers
 function handleEvent(data) {
 var event=JSON.parse(JSON.stringify(data))
+//hangman game
+async function hangmangame(Token,GID,word){
+  var characters=word
+  var order =[]
+  var i =0
+  while (i<=characters.length) {
+  order.push[math.floor(math.random()*characters.length+1)],i++
+  };
+  var show = underscore.repeat(characters.length)
+  show =show.replaceAt(order[0],characters[order[0]])
+  client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}` })
+  setTimeout(() => {
+    show =show.replaceAt(order[1],characters[order[1]])
+    client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
+  }, 30000);
+  setTimeout(()=>{
+    show =show.replaceAt(order[2],characters[order[2]])
+    client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
+  },45000);
+  setTimeout(()=>{
+    client.replyMessage(Token,{type:'text',text:`the final answer is \n ${word}`})
+    hangman.splice(hangman.indexOf(GID),1);
+    return
+  },15000);
+  if(event.message.text==words[wordId]){
+    client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${word}`});
+    return            
+  }else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}
+  }
+
 
   if (event.type !== 'message' || event.message.type !== 'text') {
     // ignore non-text-message event
@@ -85,6 +124,7 @@ var event=JSON.parse(JSON.stringify(data))
       case "picture": //picture search feature
         if(!args[0]){client.replyMessage(event.replyToken,{type:'text',text:"no keyword"});return}
         try{
+          
           GIMG.search(args[0]).then(images => {
           if(!images){client.replyMessage(event.replyToken,{type:'text',text:"request has reached the limit"});return}
             client.replyMessage(event.replyToken,{type:'image', originalContentUrl:images[0].url,previewImageUrl:images[0].thumbnail.url})
@@ -114,8 +154,23 @@ var event=JSON.parse(JSON.stringify(data))
             break;
           default : client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is ${chatbot}`});return
         }
+        case "hangman":
+        if(hangman.includes(event.source.groupId)){return};
+        hangman.push(event.source.groupId)
+        wordId=Math.floor(math.random()*words.length+1)
+        hangmangame(event.replyToken,event.source.groupId,words[wordId])
+        ;break;
+  default:
+  if(hangman.includes(event.source.groupId)){
+    if(event.message.text==words[wordId]){
+      client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${words[wordId]}`});            
+    }else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}
   }
+
+    
+      }
 }
+
 // listen on port 3000
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
