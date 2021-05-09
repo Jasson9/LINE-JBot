@@ -62,11 +62,11 @@ function hangmangame(Token,GID,word){
   console.log(Token,GID,word, show)
    client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}` })
    setTimeout(() => {
-    show =show.replaceAt(show[order[1]]=word[order[1]] )
+    show =show[order[1]]=word[order[1]] 
     client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
   }, 30000)
    setTimeout(()=>{
-    show =show.replaceAt(show[order[2]]=word[order[2]] )
+    show =show[order[2]]=word[order[2]] 
      client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
   },45000)
   setTimeout(()=>{
