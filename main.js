@@ -38,13 +38,7 @@ app.post('/webhook', line.middleware(config), (req, res) => {
     .all(req.body.events.map(handleEvent))
     .then((result) => res.json(result));
 });
-String.prototype.replaceAt = function(index, replacement) {
-  if (index >= this.length) {
-      return this.valueOf();
-  }
 
-  return this.substring(0, index) + replacement + this.substring(index + 1);
-}
 
 //get botId
 var botId
@@ -58,24 +52,25 @@ var event=JSON.parse(JSON.stringify(data))
 
 //hangman game
 function hangmangame(Token,GID,word){
+  try{
   var order =[]
   var i =0
   while (i<=word.length) {
   order.push[Math.floor(Math.random()*word.length)],i++
   };
-  var show = underscore.repeat(word.length)
-  show =show.replaceAt(order[0],word[order[0]])
+  var show = underscore.repeat(word.length).split('')
+  show[order[0]]=word[order[0]] 
   console.log(Token,GID,word, show)
-  client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}` })
-  .setTimeout(() => {
-    show =show.replaceAt(order[1],word[order[1]])
+  await client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}` })
+  await setTimeout(() => {
+    show =show.replaceAt(show[order[1]]=word[order[1]] )
     client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
   }, 30000)
-  .setTimeout(()=>{
-    show =show.replaceAt(order[2],word[order[2]])
+  await setTimeout(()=>{
+    show =show.replaceAt(show[order[2]]=word[order[2]] )
      client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
   },45000)
-  .setTimeout(()=>{
+ await setTimeout(()=>{
      client.replyMessage(Token,{type:'text',text:`the final answer is \n ${word}`})
     hangman.splice(hangman.indexOf(GID),1);
     return
@@ -85,8 +80,8 @@ function hangmangame(Token,GID,word){
  //   client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${word}`});
  //   return            
  // }else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}
+}catch(error){console.log(error)}
 }
-
 
   if (event.type !== 'message' || event.message.type !== 'text') {
     // ignore non-text-message event
