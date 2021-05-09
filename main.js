@@ -6,7 +6,6 @@ const fetch = require("node-fetch").default;
 const GIMG = new GoogleImages(process.env.CSE_ID||'9158f798cdfa53799', process.env.G_API_KEY||'AIzaSyAG6gTt_12cJjlqBUH6-bq8PxVMGkEG69I');
 const defaultAccessToken = '***********************';
 const defaultSecret = '***********************';
-
 const path = require('path');
 //settings
 const PREFIX =process.env.PREFIX||"."
@@ -21,10 +20,8 @@ const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN || defaultAccessToken,
   channelSecret: process.env.CHANNEL_SECRET || defaultSecret,
 };
-
 // create LINE SDK client
 const client = new line.Client(config);
-
 var wordId
 // create Express app
 // about Express itself: https://expressjs.com/
@@ -54,30 +51,31 @@ var botId
 fetch(`https://api.line.me/v2/bot/info`,{
   headers:{Authorization: `Bearer ${config.channelAccessToken}`
 }}).then(res=>res.json()).then(data=>{data=JSON.parse(JSON.stringify(data.basicId).replace("@","")),botId=data})
+
 // event handlers
 function handleEvent(data) {
 var event=JSON.parse(JSON.stringify(data))
+
 //hangman game
-async function hangmangame(Token,GID,word){
-  try{
+function hangmangame(Token,GID,word){
   var order =[]
   var i =0
   while (i<=word.length) {
-  order.push[Math.floor(Math.random()*word.length+1)],i++
+  order.push[Math.floor(Math.random()*word.length)],i++
   };
   var show = underscore.repeat(word.length)
   show =show.replaceAt(order[0],word[order[0]])
-  console.log(Token,GID,word)
-  await client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}` })
-  await setTimeout(() => {
+  console.log(Token,GID,word, show)
+  client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}` })
+  .setTimeout(() => {
     show =show.replaceAt(order[1],word[order[1]])
     client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
-  }, 30000);
-  await setTimeout(()=>{
+  }, 30000)
+  .setTimeout(()=>{
     show =show.replaceAt(order[2],word[order[2]])
      client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
-  },45000);
-  await setTimeout(()=>{
+  },45000)
+  .setTimeout(()=>{
      client.replyMessage(Token,{type:'text',text:`the final answer is \n ${word}`})
     hangman.splice(hangman.indexOf(GID),1);
     return
@@ -88,8 +86,6 @@ async function hangmangame(Token,GID,word){
  //   return            
  // }else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}
 }
-  catch(error){console.log(error)}
-  }
 
 
   if (event.type !== 'message' || event.message.type !== 'text') {
@@ -161,7 +157,7 @@ async function hangmangame(Token,GID,word){
         case "hangman":
         if(hangman.includes(event.source.groupId)){return};
         hangman.push(event.source.groupId)
-        wordId=Math.floor(Math.random()*words.length)
+        wordId=Math.floor(Math.random()*words.length-1)
         console.log(wordId)
         hangmangame(event.replyToken,event.source.groupId,words[wordId])
         ;break;
