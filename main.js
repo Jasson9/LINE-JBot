@@ -62,7 +62,7 @@ async function hangmangame(Token,GID,word){
   try{
   var order =[]
   var i =0
-  while (i<=characters.length) {
+  while (i<=word.length) {
   order.push[Math.floor(Math.random()*word.length+1)],i++
   };
   var show = underscore.repeat(word.length)
