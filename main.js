@@ -14,7 +14,7 @@ const botname =process.env.BOTNAME
 const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
 var hangman =[]
 var words=["hello","test","aloha","dictionary","teams","pradah"]
-var words=["hello","dictionary","teams","underestimate","impossible","training","predictable","celebrate","unknown","alone","prepare","something","lower","love","control","confirmation","confirm","end","delight","afraid","height","setting","junior","senior","apply","master","verify","handle","harvest","people","jealous","happy","memory","deny","abort","style","school","global","pandemic","quarantine","sad"]
+var words=["hello","dictionary","teams","underestimate","impossible","training","predictable","celebrate","unknown","alone","prepare","something","lower","love","control","confirmation","confirm","end","delight","afraid","height","setting","junior","senior","apply","master","verify","handle","harvest","people","jealous","happy","memory","deny","abort","style","school","global","pandemic","quarantine"]
 var underscore="-"
 // LINE SDK config from env variables
 const config = {
@@ -58,22 +58,47 @@ function hangmangame(Token,GID,word){
   while (i<=word.length) {
   order.push(Math.floor(Math.random()*word.length)),i++
   };
-  i=0
   var show = underscore.repeat(word.length).split('')
   show[order[0]]=word[order[0]] 
   console.log(Token,GID,word, show, order)
-   client.replyMessage(Token,{type:"text",text:`guess this word \n ${show.join('')}`})
-   var msg = setTimeout(()=>{if(hangman.includes(GID)){
-    if(!show.sort().join('').includes("--")){show[order[i]]=word[order[i]]} 
-    client.pushMessage(GID,{type:"text",text:`guess this word \n ${show.join('')}`}),i++}},15000)
-  setInterval(() => {msg}, 30000);
-  setTimeout(clearInterval(msg),160000)
+   client.replyMessage(Token,{type:"text",text:`guess this word and save this person \n ${show.join('')} \n \n you have 90 seconds`})
+   setTimeout(() => { //15 seconds
+     if(hangman.includes(GID)){
+      if(!show.sort().join('').includes("--")){
+    show[order[1]]=word[order[1]] }
+    client.pushMessage(GID,{type:"text",text:`75 seconds left! \n ${show.join('')} \n \n \n / `})
+  }else{return}}, 15000)
+   setTimeout(()=>{
+     if(hangman.includes(GID)){ // 30 seconds
+    if(!show.sort().join('').includes("--")){
+    show[order[2]]=word[order[2]] }
+     client.pushMessage(GID,{type:"text",text:`60 seconds left! \n ${show.join('')} \n\n  \n / \\`})
+   }else{return}},30000)
+   setTimeout(()=>{
+    if(hangman.includes(GID)){ // 45 seconds
+   if(!show.sort().join('').includes("--")){
+   show[order[3]]=word[order[3]] }
+    client.pushMessage(GID,{type:"text",text:`45 seconds left! \n ${show.join('')}\n\n  |\n / \\ `})
+  }else{return}},45000)
   setTimeout(()=>{
+    if(hangman.includes(GID)){ // 60 seconds
+   if(!show.sort().join('').includes("--")){
+   show[order[4]]=word[order[4]] }
+    client.pushMessage(GID,{type:"text",text:`30 seconds left! \n ${show.join('')}\n\n /|\n / \\ `})
+  }else{return}},60000)
+  setTimeout(()=>{
+    if(hangman.includes(GID)){ // 75 seconds
+   if(!show.sort().join('').includes("--")){
+   show[order[5]]=word[order[5]] }
+    client.pushMessage(GID,{type:"text",text:`15 seconds left! \n ${show.join('')}\n\n /|\\\n / \\ `})
+  }else{return}},75000)
+  setTimeout(()=>{ //dead
     if(hangman.includes(GID)){
-     client.pushMessage(GID,{type:'text',text:`the answer is ${word}`})
+     client.pushMessage(GID,{type:'text',text:`owh no he is dead! the answer is \n ${word} \n  X\n /|\\\n / \\ `})
     hangman.splice(hangman.indexOf(GID),1);
     return
-  }return},180000);
+  }return},90000);
+
 }
 
   if (event.type !== 'message' || event.message.type !== 'text') {
