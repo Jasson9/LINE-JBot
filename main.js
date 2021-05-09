@@ -59,7 +59,7 @@ function hangmangame(Token,GID,word){
   };
   var show = underscore.repeat(word.length).split('')
   show[order[0]]=word[order[0]] 
-  console.log(Token,GID,word, show)
+  console.log(Token,GID,word, show, order)
    client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}` })
    setTimeout(() => {
     show =show[order[1]]=word[order[1]] 
