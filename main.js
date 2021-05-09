@@ -153,10 +153,11 @@ function hangmangame(Token,GID,word){
         if(hangman.includes(event.source.groupId)){return};
         hangman.push(event.source.groupId)
         wordId=Math.floor(Math.random()*words.length)
-        console.log(wordId)
+        console.log(words[wordId])
         hangmangame(event.replyToken,event.source.groupId,words[wordId])
         ;break;
 default:
+  console.log(cmd)
   if(hangman.includes(event.source.groupId)){
     if(cmd==words[wordId]){
       client.pushMessage(event.source.groupId,{type:'text',text:`the answer is correct \n ${words[wordId]}`});
