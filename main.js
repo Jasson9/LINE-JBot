@@ -10,12 +10,12 @@ const path = require('path');
 //settings
 const PREFIX =process.env.PREFIX||"."
 var chatbot ="off"
+var chatbot =[]
 const botname =process.env.BOTNAME
 const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
 var hangman =[]
-var words=["hello","test","aloha","dictionary","teams","pradah"]
 var words=["hello","dictionary","teams","underestimate","impossible","training","predictable","celebrate","unknown","alone","prepare","something","lower","love","control","confirmation","confirm","end","delight","afraid","height","setting","junior","senior","apply","master","verify","handle","harvest","people","jealous","happy","memory","deny","abort","style","school","global","pandemic","quarantine"]
-var underscore="-"
+
 // LINE SDK config from env variables
 const config = {
   channelAccessToken: "Uo3gYpv3LTd/nKHdYIz1/gqzKxk/rddQi9W+d4bCCG6z+1PIae8euhOo8WGome1shyh/wD9Brn8YnzQtDp5uekxl5H1hSWHW2ot3dbhfyK0h1cfiAatZfO1wNYq44T1jsbO/IYVyLuea4bfd38+oAQdB04t89/1O/w1cDnyilFU="||process.env.CHANNEL_ACCESS_TOKEN || defaultAccessToken,
@@ -64,7 +64,7 @@ for (let i = 0;i<data.length; i++) {
   while (i<=word.length) {
   order.push(Math.floor(Math.random()*word.length)),i++
   };
-  var show = underscore.repeat(word.length).split('')
+  var show = "-".repeat(word.length).split('')
   show[order[0]]=word[order[0]] 
   console.log(Token,GID,word, show, order)
    client.replyMessage(Token,{type:"text",text:`guess this word and save this person \n ${show.join('')} \n \n you have 90 seconds`})
@@ -104,7 +104,6 @@ for (let i = 0;i<data.length; i++) {
     hangman.splice(hangman.indexOf(GID),1);
     return
   }return},90000);
-
 }
 
   if (event.type !== 'message' || event.message.type !== 'text') {
@@ -116,7 +115,7 @@ for (let i = 0;i<data.length; i++) {
   var cmd = args.shift().replace(PREFIX,"").toLowerCase()
 
   if(!event.message.text.slice(0).includes(`${PREFIX}`)){cmd=undefined//if the message has no prefix then use the chatbot if on and return no command
-  if(chatbot=="on"){
+  if(chatbot.includes(event.source.groupId)){
     fetch(`https://api.snowflakedev.xyz/api/chatbot?message=${encodeURIComponent(event.message.text)}&name=${botname}`, {
         headers: {
             "Authorization": CBAuth        
@@ -132,7 +131,6 @@ for (let i = 0;i<data.length; i++) {
   console.log(args)
   console.log(cmd)
   switch(cmd){
-
     case "help": //show help message
      client.replyMessage(event.replyToken,{type:'text',text: `available commands: \n ${PREFIX}help: show this message \n ${PREFIX}picture: search picture using google search engine \n ${PREFIX}echo : reply back the message after the command \n ${PREFIX}chatbot : to see chatbot status or turn on or off \n ${PREFIX}invite : to show the invite link of the bot\n \n creator:JZ9`})
       break;
@@ -161,21 +159,28 @@ for (let i = 0;i<data.length; i++) {
       case "chatbot": //switch on or off for the AI chatbot
         switch(args[0]){
           case "off":
-            chatbot="off"
+            chatbot.push(event.source.groupId)
             client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is now ${chatbot}`});
             break;
           case "on":
-            chatbot="on"
+            chatbot.push(event.source.groupId)
             client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is now ${chatbot} \n don't expect the responses make sense`});
             break;
           default : client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is ${chatbot}`});return
         }
-        case "hangman":
-        if(hangman.includes(event.source.groupId)){return};
+      case "hangman":
+        switch(args[0]){
+            case"stop":
+            client.pushMessage(event.source.groupId,{type:'text',text:`hangman game has been stopped`})
+            hangman.splice(hangman.indexOf(event.source.groupId),1)
+            ;break;
+        default:
+        if(hangman.includes(event.source.groupId)){client.pushMessage(event.source.groupId,{type:'text',text:`the game have already running, to stop it use ${PREFIX}hangman stop`});return};
         hangman.push(event.source.groupId)
         wordId=Math.floor(Math.random()*words.length)
         console.log(words[wordId])
         hangmangame(event.replyToken,event.source.groupId,words[wordId])
+          }
         ;break;
 default:
   console.log(event.message.text)
