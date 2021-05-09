@@ -75,7 +75,7 @@ function hangmangame(Token,GID,word){
     hangman.splice(hangman.indexOf(GID),1);
     return
   },90000);
-  while(answer='false'){}return
+  
   //await event.message
   //if(event.message.text==words[wordId]){
  //   client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${word}`});
@@ -164,8 +164,7 @@ function hangmangame(Token,GID,word){
       if(hangman.includes(event.source.groupId)){
       if(event.message.text.toLowerCase==words){
         client.pushMessage(event.source.groupId,{type:'text',text:`the answer is correct \n ${words[wordId]}`});
-        hangman.splice(hangman.indexOf(GID),1);
-        answer="true"            
+        hangman.splice(hangman.indexOf(GID),1);            
         return
        }else{client.pushMessage(event.source.groupId,{type:'text',text:`incorrect!`});}
       }
