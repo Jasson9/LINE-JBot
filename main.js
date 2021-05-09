@@ -51,7 +51,7 @@ function handleEvent(data) {
 var event=JSON.parse(JSON.stringify(data))
 
 //hangman game
-function hangmangame(Token,GID,word){
+async function hangmangame(Token,GID,word){
   try{
   var order =[]
   var i =0
