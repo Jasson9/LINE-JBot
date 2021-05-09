@@ -14,7 +14,7 @@ var chatbot ="off"
 const botname =process.env.BOTNAME
 const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
 var hangman =[]
-var words=["hello","test","aloha"]
+var words=["hello","test","aloha","dictionary","teams","pradah"]
 var underscore="-"
 // LINE SDK config from env variables
 const config = {
@@ -81,10 +81,12 @@ async function hangmangame(Token,GID,word){
     hangman.splice(hangman.indexOf(GID),1);
     return
   },15000);
-  if(event.message.text==words[wordId]){
-    client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${word}`});
-    return            
-  }else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}}
+  //await event.message
+  //if(event.message.text==words[wordId]){
+ //   client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${word}`});
+ //   return            
+ // }else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}
+}
   catch(error){console.log(error)}
   }
 
@@ -162,14 +164,15 @@ async function hangmangame(Token,GID,word){
         console.log(wordId)
         hangmangame(event.replyToken,event.source.groupId,words[wordId])
         ;break;
-  default:
-  if(hangman.includes(event.source.groupId)){
-    if(event.message.text==words[wordId]){
-      client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${words[wordId]}`});            
-    }else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}
-  }
+
+
 
     
+      }  
+      if(hangman.includes(event.source.groupId)){
+        if(event.message.text==words[wordId]){
+          client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${words[wordId]}`});            
+        return}else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}
       }
 }
 
