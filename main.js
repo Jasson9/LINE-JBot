@@ -16,6 +16,7 @@ var hangman =[]
 var words=["hello","test","aloha","dictionary","teams","pradah"]
 var answer = "false"
 var underscore="-"
+var answer="false"
 // LINE SDK config from env variables
 const config = {
   channelAccessToken: "Uo3gYpv3LTd/nKHdYIz1/gqzKxk/rddQi9W+d4bCCG6z+1PIae8euhOo8WGome1shyh/wD9Brn8YnzQtDp5uekxl5H1hSWHW2ot3dbhfyK0h1cfiAatZfO1wNYq44T1jsbO/IYVyLuea4bfd38+oAQdB04t89/1O/w1cDnyilFU="||process.env.CHANNEL_ACCESS_TOKEN || defaultAccessToken,
@@ -75,7 +76,11 @@ function hangmangame(Token,GID,word){
     hangman.splice(hangman.indexOf(GID),1);
     return
   },90000);
-  
+  for(;;){
+    if(answer="true"){
+    return
+    }
+  }
   //await event.message
   //if(event.message.text==words[wordId]){
  //   client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${word}`});
@@ -161,7 +166,8 @@ default:
   if(hangman.includes(event.source.groupId)){
     if(event.message.text==words[wordId]){
       client.pushMessage(event.source.groupId,{type:'text',text:`the answer is correct \n ${words[wordId]}`});
-      hangman.splice(hangman.indexOf(GID),1);            
+      hangman.splice(hangman.indexOf(GID),1)
+      answer="true"            
       return
      }else{client.pushMessage(event.source.groupId,{type:'text',text:`incorrect!`});}
       }        
