@@ -63,7 +63,7 @@ async function hangmangame(Token,GID,word){
   var order =[]
   var i =0
   while (i<=characters.length) {
-  order.push[math.floor(math.random()*characters.length+1)],i++
+  order.push[Math.floor(Math.random()*characters.length+1)],i++
   };
   var show = underscore.repeat(characters.length)
   show =show.replaceAt(order[0],characters[order[0]])
@@ -157,7 +157,7 @@ async function hangmangame(Token,GID,word){
         case "hangman":
         if(hangman.includes(event.source.groupId)){return};
         hangman.push(event.source.groupId)
-        wordId=Math.floor(math.random()*words.length+1)
+        wordId=Math.floor(Math.random()*words.length+1)
         hangmangame(event.replyToken,event.source.groupId,words[wordId])
         ;break;
   default:
