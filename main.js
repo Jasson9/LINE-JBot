@@ -59,21 +59,21 @@ function handleEvent(data) {
 var event=JSON.parse(JSON.stringify(data))
 //hangman game
 async function hangmangame(Token,GID,word){
-  var characters=word
+  try{
   var order =[]
   var i =0
   while (i<=characters.length) {
-  order.push[Math.floor(Math.random()*characters.length+1)],i++
+  order.push[Math.floor(Math.random()*word.length+1)],i++
   };
-  var show = underscore.repeat(characters.length)
-  show =show.replaceAt(order[0],characters[order[0]])
+  var show = underscore.repeat(word.length)
+  show =show.replaceAt(order[0],word[order[0]])
   client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}` })
   setTimeout(() => {
-    show =show.replaceAt(order[1],characters[order[1]])
+    show =show.replaceAt(order[1],word[order[1]])
     client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
   }, 30000);
   setTimeout(()=>{
-    show =show.replaceAt(order[2],characters[order[2]])
+    show =show.replaceAt(order[2],word[order[2]])
     client.replyMessage(Token,{type:'text',text:`guess this word \n ${show}`})
   },45000);
   setTimeout(()=>{
@@ -84,7 +84,8 @@ async function hangmangame(Token,GID,word){
   if(event.message.text==words[wordId]){
     client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${word}`});
     return            
-  }else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}
+  }else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}}
+  catch(error){console.log(error)}
   }
 
 
@@ -158,6 +159,7 @@ async function hangmangame(Token,GID,word){
         if(hangman.includes(event.source.groupId)){return};
         hangman.push(event.source.groupId)
         wordId=Math.floor(Math.random()*words.length+1)
+        console.log(wordId)
         hangmangame(event.replyToken,event.source.groupId,words[wordId])
         ;break;
   default:
