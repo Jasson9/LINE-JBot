@@ -158,7 +158,7 @@ function hangmangame(Token,GID,word){
         ;break;
 default:
   if(hangman.includes(event.source.groupId)){
-    if(event.message.text.toLowerCase==words[worId]){
+    if(event.message.text.toLowerCase==words[wordId]){
       client.pushMessage(event.source.groupId,{type:'text',text:`the answer is correct \n ${words[wordId]}`});
       hangman.splice(hangman.indexOf(GID),1);            
       return
