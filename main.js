@@ -156,17 +156,14 @@ function hangmangame(Token,GID,word){
         console.log(wordId)
         hangmangame(event.replyToken,event.source.groupId,words[wordId])
         ;break;
-
-
-
-    
-      }     
-      if(hangman.includes(event.source.groupId)){
-      if(event.message.text.toLowerCase==words){
-        client.pushMessage(event.source.groupId,{type:'text',text:`the answer is correct \n ${words[wordId]}`});
-        hangman.splice(hangman.indexOf(GID),1);            
-        return
-       }else{client.pushMessage(event.source.groupId,{type:'text',text:`incorrect!`});}
+default:
+  if(hangman.includes(event.source.groupId)){
+    if(event.message.text.toLowerCase==words[worId]){
+      client.pushMessage(event.source.groupId,{type:'text',text:`the answer is correct \n ${words[wordId]}`});
+      hangman.splice(hangman.indexOf(GID),1);            
+      return
+     }else{client.pushMessage(event.source.groupId,{type:'text',text:`incorrect!`});}
+      }        
       }
        
         
