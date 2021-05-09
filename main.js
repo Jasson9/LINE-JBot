@@ -157,9 +157,9 @@ function hangmangame(Token,GID,word){
         hangmangame(event.replyToken,event.source.groupId,words[wordId])
         ;break;
 default:
-  console.log(cmd)
+  console.log(event.message.text)
   if(hangman.includes(event.source.groupId)){
-    if(cmd==words[wordId]){
+    if(event.message.text==words[wordId]){
       client.pushMessage(event.source.groupId,{type:'text',text:`the answer is correct \n ${words[wordId]}`});
       hangman.splice(hangman.indexOf(GID),1);            
       return
