@@ -14,7 +14,7 @@ const botname =process.env.BOTNAME
 const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
 var hangman =[]
 var words=["hello","test","aloha","dictionary","teams","pradah"]
-var words=["hello","test","aloha","dictionary","teams","underestimate","impossible"]
+var words=["hello","dictionary","teams","underestimate","impossible","training","predictable","celebrate","unknown","alone","prepare","something","lower","love","control","confirmation","confirm","end","delight","afraid","height","setting","junior","senior","apply","master","verify","handle","harvest","people","jealous","happy","memory","deny","abort","style","school","global","pandemic","quarantine","sad"]
 var underscore="-"
 // LINE SDK config from env variables
 const config = {
@@ -58,26 +58,22 @@ function hangmangame(Token,GID,word){
   while (i<=word.length) {
   order.push(Math.floor(Math.random()*word.length)),i++
   };
+  i=0
   var show = underscore.repeat(word.length).split('')
   show[order[0]]=word[order[0]] 
   console.log(Token,GID,word, show, order)
    client.replyMessage(Token,{type:"text",text:`guess this word \n ${show.join('')}`})
-   setTimeout(() => {
-     if(hangman.includes(GID)){
-    show[order[1]]=word[order[1]] 
-    client.pushMessage(GID,{type:"text",text:`guess this word \n ${show.join('')}`})
-  }else{return}}, 15000)
-   setTimeout(()=>{
-     if(hangman.includes(GID)){
-    show[order[2]]=word[order[2]] 
-     client.pushMessage(GID,{type:"text",text:`guess this word \n ${show.join('')}`})
-   }else{return}},45000)
+   var msg = setTimeout(()=>{if(hangman.includes(GID)){
+    if(!show.sort().join('').includes("--")){show[order[i]]=word[order[i]]} 
+    client.pushMessage(GID,{type:"text",text:`guess this word \n ${show.join('')}`}),i++}},15000)
+  setInterval(() => {msg}, 30000);
+  setTimeout(clearInterval(msg),160000)
   setTimeout(()=>{
     if(hangman.includes(GID)){
      client.pushMessage(GID,{type:'text',text:`the answer is ${word}`})
     hangman.splice(hangman.indexOf(GID),1);
     return
-  }return},90000);
+  }return},180000);
 }
 
   if (event.type !== 'message' || event.message.type !== 'text') {
@@ -90,9 +86,6 @@ function hangmangame(Token,GID,word){
 
   if(!event.message.text.slice(0).includes(`${PREFIX}`)){cmd=undefined//if the message has no prefix then use the chatbot if on and return no command
   if(chatbot=="on"){
-    //if(!event.message.source.userId){return} 
-    //if the message have userId then use the chatbot
-        
     fetch(`https://api.snowflakedev.xyz/api/chatbot?message=${encodeURIComponent(event.message.text)}&name=${botname}`, {
         headers: {
             "Authorization": CBAuth        
