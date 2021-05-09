@@ -2,12 +2,19 @@
 const GoogleImages = require('google-images');
 const line = require('@line/bot-sdk');
 const express = require('express');
-
-const GIMG = new GoogleImages('9158f798cdfa53799', 'AIzaSyAG6gTt_12cJjlqBUH6-bq8PxVMGkEG69I');
+const fetch = require("node-fetch").default;    
+const GIMG = new GoogleImages(process.env.CSE_ID||'9158f798cdfa53799', process.env.G_API_KEY||'AIzaSyAG6gTt_12cJjlqBUH6-bq8PxVMGkEG69I');
 const defaultAccessToken = '***********************';
 const defaultSecret = '***********************';
+const path = require('path')
 
-// create LINE SDK config from env variables
+//settings
+const PREFIX =process.env.PREFIX||"."
+var chatbot ="off"
+const botname =process.env.BOTNAME
+const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
+
+// LINE SDK config from env variables
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN || defaultAccessToken,
   channelSecret: process.env.CHANNEL_SECRET || defaultSecret,
@@ -21,7 +28,7 @@ const client = new line.Client(config);
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.sendFile(path.join(__dirname,'/index.html'));
 });
 
 // register a webhook handler with middleware
@@ -31,10 +38,14 @@ app.post('/webhook', line.middleware(config), (req, res) => {
     .all(req.body.events.map(handleEvent))
     .then((result) => res.json(result));
 });
-//var msg =".picture test"
-//var args = [].slice.call(msg);
-//console.log(args)
-// event handler
+
+//get botId
+var botId
+fetch(`https://api.line.me/v2/bot/info`,{
+  headers:{Authorization: `Bearer ${config.channelAccessToken}`
+}}).then(res=>res.json()).then(data=>{data=JSON.parse(JSON.stringify(data.basicId).replace("@","")),botId=data})
+
+// event handlers
 function handleEvent(data) {
 var event=JSON.parse(JSON.stringify(data))
 
@@ -43,28 +54,68 @@ var event=JSON.parse(JSON.stringify(data))
     return Promise.resolve(null);
   }
 
-  // create a echoing text message
-  if(event.message.text=="echo"){
-  var echo = { type: 'text', text: "echo" };
-  
-  // use reply API
-  return client.replyMessage(event.replyToken, echo);
+  var args = event.message.text.split(" ")
+  var cmd = args.shift().replace(PREFIX,"").toLowerCase()
+
+  if(!event.message.text.slice(0).includes(`${PREFIX}`)){cmd=undefined//if the message has no prefix then use the chatbot if on and return no command
+  if(chatbot=="on"){
+    //if(!event.message.source.userId){return} 
+    //if the message have userId then use the chatbot
+        
+    fetch(`https://api.snowflakedev.xyz/api/chatbot?message=${encodeURIComponent(event.message.text)}&name=${botname}`, {
+        headers: {
+            "Authorization": CBAuth        
+        }
+    })
+        .then(res => res.json())
+        .then(data => {
+          client.replyMessage(event.replyToken,{type:'text',text:data.message});
+        })
+        .catch(e => console.error('An error occured'));
+      }}
+    
+  console.log(args)
+  console.log(cmd)
+  switch(cmd){
+
+    case "help": //show help message
+     client.replyMessage(event.replyToken,{type:'text',text: `available commands: \n ${PREFIX}help: show this message \n ${PREFIX}picture: search picture using google search engine \n ${PREFIX}echo : reply back the message after the command \n ${PREFIX}chatbot : to see chatbot status or turn on or off \n ${PREFIX}invite : to show the invite link of the bot\n \n creator:JZ9`})
+      break;
+
+      case "picture": //picture search feature
+        if(!args[0]){client.replyMessage(event.replyToken,{type:'text',text:"no keyword"});return}
+        try{
+          GIMG.search(args[0]).then(images => {
+          if(!images){client.replyMessage(event.replyToken,{type:'text',text:"request has reached the limit"});return}
+            client.replyMessage(event.replyToken,{type:'image', originalContentUrl:images[0].url,previewImageUrl:images[0].thumbnail.url})
+        }).catch(err)   
+        }
+        catch(err){if(err){
+          console.log(err)}}
+        break;
+
+      case "echo": //echo/resend the message after ${prefix}echo
+          if(!args[0]){
+            client.replyMessage(event.replyToken,{type:'text',text:"no message specified"});return
+          }
+          client.replyMessage(event.replyToken,{type:'text',text:args.join(" ")});break;
+      case "invite": //add invite feature
+        client.replyMessage(event.replyToken,{type:'text',text:`To invite/add this bot use this url: \n https://line.me/R/ti/p/%40${botId}`});break;
+
+      case "chatbot": //switch on or off for the AI chatbot
+        switch(args[0]){
+          case "off":
+            chatbot="off"
+            client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is now ${chatbot}`});
+            break;
+          case "on":
+            chatbot="on"
+            client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is now ${chatbot} \n don't expect the responses make sense`});
+            break;
+          default : client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is ${chatbot}`});return
+        }
   }
-  if(event.message.text.includes(".pic")){ 
-    var keyword = event.message.text.replace(".pic ","")
-GIMG.search(keyword)
-    .then(images => {
-      if(!images){client.replyMessage(event.replyToken,{type:'text',text:"request has reached the limit"});return}
-        client.replyMessage(event.replyToken,{type:'image', originalContentUrl:images[0].url,previewImageUrl:images[0].thumbnail.url})
-    });
 }
-if(event.message.text.includes(".picture")){ 
-    var keyword = event.message.text.replace(".picture ","")
-GIMG.search(keyword)
-    .then(images => {
-        client.replyMessage(event.replyToken,{type:'image', originalContentUrl:images[0].url,previewImageUrl:images[0].thumbnail.url})
-    });
-}}
 // listen on port 3000
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
