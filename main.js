@@ -69,30 +69,35 @@ for (let i = 0;i<data.length; i++) {
   console.log(Token,GID,word, show, order)
    client.replyMessage(Token,{type:"text",text:`guess this word and save this person \n ${show.join('')} \n \n you have 90 seconds`})
    setTimeout(() => { //15 seconds
+     if(hangman.includes(GID)){
       if(count(show)>2){
     show[order[1]]=word[order[1]] }
     client.pushMessage(GID,{type:"text",text:`75 seconds left! \n ${show.join('')} \n \n \n / `})
-  }, 15000)
-   setTimeout(()=>{ // 30 seconds
+  }else{return}}, 15000)
+   setTimeout(()=>{
+      // 30 seconds
     if(count(show)>2){
     show[order[2]]=word[order[2]] }
      client.pushMessage(GID,{type:"text",text:`60 seconds left! \n ${show.join('')} \n\n  \n / \\`})
    },30000)
-   setTimeout(()=>{// 45 seconds
+   setTimeout(()=>{
+    if(hangman.includes(GID)){ // 45 seconds
    if(count(show)>2){
    show[order[3]]=word[order[3]] }
     client.pushMessage(GID,{type:"text",text:`45 seconds left! \n ${show.join('')}\n\n  |\n / \\ `})
-   },45000)
-  setTimeout(()=>{// 60 seconds
+  }else{return}},45000)
+  setTimeout(()=>{
+    if(hangman.includes(GID)){ // 60 seconds
    if(count(show)>2){
    show[order[4]]=word[order[4]] }
     client.pushMessage(GID,{type:"text",text:`30 seconds left! \n ${show.join('')}\n\n /|\n / \\ `})
-  },60000)
-  setTimeout(()=>{// 75 seconds
+  }else{return}},60000)
+  setTimeout(()=>{
+    if(hangman.includes(GID)){ // 75 seconds
    if(count(show)>2){
    show[order[5]]=word[order[5]] }
     client.pushMessage(GID,{type:"text",text:`15 seconds left! \n ${show.join('')}\n\n /|\\\n / \\ `})
-  },75000)
+  }else{return}},75000)
   setTimeout(()=>{ //dead
     if(hangman.includes(GID)){
      client.pushMessage(GID,{type:'text',text:`owh no he is dead! the answer is ${word} \n\n  |\n  X\n /|\\\n / \\ `})
