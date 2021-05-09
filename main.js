@@ -78,17 +78,6 @@ function hangmangame(Token,GID,word){
     hangman.splice(hangman.indexOf(GID),1);
     return
   }return},90000);
-  for(;;){
-    if(answer="true"){
-      console.log('returned')
-    return
-    }
-  }
-  //await event.message
-  //if(event.message.text==words[wordId]){
- //   client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${word}`});
- //   return            
- // }else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}
 }
 
   if (event.type !== 'message' || event.message.type !== 'text') {
