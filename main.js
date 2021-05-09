@@ -55,7 +55,7 @@ function hangmangame(Token,GID,word){
   var order =[]
   var i =0
   while (i<=word.length) {
-  order.push[Math.floor(Math.random()*word.length)],i++
+  order.push(Math.floor(Math.random()*word.length)),i++
   };
   var show = underscore.repeat(word.length).split('')
   show[order[0]]=word[order[0]] 
@@ -159,11 +159,11 @@ function hangmangame(Token,GID,word){
 
     
       }  
-      if(hangman.includes(event.source.groupId)){
-        if(event.message.text==words[wordId]){
-          client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${words[wordId]}`});            
-        return}else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}
-      }
+      //if(hangman.includes(event.source.groupId)){
+        //if(event.message.text==words[wordId]){
+        //  client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${words[wordId]}`});            
+        //return}else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}
+      //}
 }
 
 // listen on port 3000
