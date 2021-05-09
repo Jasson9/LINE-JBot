@@ -14,9 +14,8 @@ const botname =process.env.BOTNAME
 const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
 var hangman =[]
 var words=["hello","test","aloha","dictionary","teams","pradah"]
-var answer = "false"
+var words=["hello","test","aloha","dictionary","teams","underestimate","impossible"]
 var underscore="-"
-var answer="false"
 // LINE SDK config from env variables
 const config = {
   channelAccessToken: "Uo3gYpv3LTd/nKHdYIz1/gqzKxk/rddQi9W+d4bCCG6z+1PIae8euhOo8WGome1shyh/wD9Brn8YnzQtDp5uekxl5H1hSWHW2ot3dbhfyK0h1cfiAatZfO1wNYq44T1jsbO/IYVyLuea4bfd38+oAQdB04t89/1O/w1cDnyilFU="||process.env.CHANNEL_ACCESS_TOKEN || defaultAccessToken,
@@ -64,20 +63,24 @@ function hangmangame(Token,GID,word){
   console.log(Token,GID,word, show, order)
    client.replyMessage(Token,{type:"text",text:`guess this word \n ${show.join('')}`})
    setTimeout(() => {
+     if(hangman.includes(GID)){
     show[order[1]]=word[order[1]] 
     client.pushMessage(GID,{type:"text",text:`guess this word \n ${show.join('')}`})
-  }, 15000)
+  }else{return}}, 15000)
    setTimeout(()=>{
+     if(hangman.includes(GID)){
     show[order[2]]=word[order[2]] 
      client.pushMessage(GID,{type:"text",text:`guess this word \n ${show.join('')}`})
-  },45000)
+   }else{return}},45000)
   setTimeout(()=>{
+    if(hangman.includes(GID)){
      client.pushMessage(GID,{type:'text',text:`the answer is ${word}`})
     hangman.splice(hangman.indexOf(GID),1);
     return
-  },90000);
+  }return},90000);
   for(;;){
     if(answer="true"){
+      console.log('returned')
     return
     }
   }
@@ -167,14 +170,11 @@ default:
     if(event.message.text==words[wordId]){
       client.pushMessage(event.source.groupId,{type:'text',text:`the answer is correct \n ${words[wordId]}`});
       hangman.splice(hangman.indexOf(event.source.groupId),1)
-      answer="true"            
+      console.log(hangman)          
       return
      }else{client.pushMessage(event.source.groupId,{type:'text',text:`incorrect!`});}
       }        
       }
-       
-        
-      
 }
 
 // listen on port 3000
