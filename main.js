@@ -61,10 +61,15 @@ function hangmangame(Token,GID,word){
   show[order[0]]=word[order[0]] 
   console.log(Token,GID,word, show, order)
    client.replyMessage(Token,{type:"text",text:`guess this word \n ${show}`})
+   if(event.message.text.toLowerCase==word){
+    client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${words[wordId]}`});
+    hangman.splice(hangman.indexOf(GID),1);            
+    return
+   }
    setTimeout(() => {
     show[order[1]]=word[order[1]] 
     client.pushMessage(GID,{type:"text",text:`guess this word \n ${show}`})
-  }, 30000)
+  }, 15000)
    setTimeout(()=>{
     show[order[2]]=word[order[2]] 
      client.pushMessage(GID,{type:"text",text:`guess this word \n ${show}`})
@@ -73,7 +78,8 @@ function hangmangame(Token,GID,word){
      client.pushMessage(GID,{type:'text',text:`the answer is ${word}`})
     hangman.splice(hangman.indexOf(GID),1);
     return
-  },15000);
+  },90000);
+  
   //await event.message
   //if(event.message.text==words[wordId]){
  //   client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${word}`});
@@ -159,11 +165,10 @@ function hangmangame(Token,GID,word){
 
     
       }  
-      //if(hangman.includes(event.source.groupId)){
-        //if(event.message.text==words[wordId]){
-        //  client.replyMessage(event.replyToken,{type:'text',text:`the answer is correct \n ${words[wordId]}`});            
-        //return}else{client.replyMessage(event.replyToken,{type:'text',text:`incorrect!`});}
-      //}
+   
+       
+        
+      
 }
 
 // listen on port 3000
