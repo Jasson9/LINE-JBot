@@ -26,14 +26,14 @@ const client = new line.Client(config);
 //assign cache data function
 function assigncache(activity,GID,ID,data,data2){
 if(activity&&GID){
-  datas[activity]=[GID]
+cache[activity]=[GID]
   if(ID){
-    datas[activity][GID]=[ID]
+    cache[activity][GID]=[ID]
     if(data&&!data2){
-      datas[activity][GID][ID]=data
+      cache[activity][GID][ID]=data
       }else{
     if(data1&&data2){
-        datas[activity][GID][ID]=data2
+        cache[activity][GID][ID]=data2
       }}
     }
   }return
