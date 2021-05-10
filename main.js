@@ -14,7 +14,7 @@ var chatbot =[]
 const botname =process.env.BOTNAME
 const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
 var hangman =[]
-var words=["hello","dictionary","teams","underestimate","impossible","training","predictable","celebrate","unknown","alone","prepare","something","lower","love","control","confirmation","confirm","end","delight","afraid","height","setting","junior","senior","apply","master","verify","handle","harvest","people","jealous","happy","memory","deny","abort","style","school","global","pandemic","quarantine"]
+var words=["hello","dictionary","intelligent","respect","beautiful","problem","help","shock","wealthy","zigzag","destiny","destination","simple","answer","combination","serious","colour","meaningless","amazing","repeat","profile","teams","underestimate","impossible","training","predictable","celebrate","unknown","alone","prepare","something","lower","love","control","confirmation","confirm","end","delight","afraid","height","setting","junior","senior","apply","master","verify","handle","harvest","people","jealous","happy","memory","deny","abort","style","school","global","pandemic","quarantine"]
 
 // LINE SDK config from env variables
 const config = {
@@ -72,13 +72,13 @@ for (let i = 0;i<data.length; i++) {
    setTimeout(() => { //15 seconds
      if(hangman.includes(GID)){
       if(count(show)>2){
-    show[order[1]]=word[order[1]] 
+    show[order[1]]=word[order[1]]} 
     client.pushMessage(GID,{type:"text",text:`75 seconds left! \n ${show.join('')} \n \n \n / `})
 
-   setTimeout(()=>{
-      // 30 seconds
+   setTimeout(()=>{ // 30 seconds
+    if(hangman.includes(GID)){
     if(count(show)>2){
-    show[order[2]]=word[order[2]] 
+    show[order[2]]=word[order[2]]} 
      client.pushMessage(GID,{type:"text",text:`60 seconds left! \n ${show.join('')} \n\n  \n / \\`})
 
      setTimeout(()=>{
@@ -98,6 +98,7 @@ for (let i = 0;i<data.length; i++) {
      if(count(show)>2){
      show[order[5]]=word[order[5]] }
       client.pushMessage(GID,{type:"text",text:`15 seconds left! \n ${show.join('')}\n\n /|\\\n / \\ `})
+      
     setTimeout(()=>{ //dead
       if(hangman.includes(GID)){
        client.pushMessage(GID,{type:'text',text:`owh no he is dead! the answer is ${word} \n\n  |\n  X\n /|\\\n / \\ `})
@@ -114,7 +115,7 @@ for (let i = 0;i<data.length; i++) {
 }else{return}
   },15000)
 }else{return}
-  }}, 15000);
+  }, 15000);
   setInterval(() => {
     if(!hangman.includes(GID)){return;}
   }, 2000);
@@ -202,10 +203,11 @@ default:
   console.log(event.message.text)
   if(hangman.includes(event.source.groupId)){
     if(event.message.text==words[wordId]){
-      client.pushMessage(event.source.groupId,{type:'text',text:`the answer is correct \n ${words[wordId]}`});
+      client.getProfile(event.source.userId).then((data)=>{
+      client.pushMessage(event.source.groupId,{type:'text',text:`${data.displayName} answer's is correct \n${words[wordId]}`})
       hangman.splice(hangman.indexOf(event.source.groupId),1)
       console.log(hangman)          
-      return
+      return})
      }else{client.pushMessage(event.source.groupId,{type:'text',text:`incorrect!`});}
       }        
       }
