@@ -198,6 +198,7 @@ for (let i = 0;i<data.length; i++) {
           }
         ;break;
 default:
+  console.log(hangman)
   console.log(event.message.text)
   if(hangman.includes(event.source.groupId)){
     if(event.message.text==words[wordId]){
