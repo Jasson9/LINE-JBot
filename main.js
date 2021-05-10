@@ -67,46 +67,47 @@ for (let i = 0;i<data.length; i++) {
   var show = "-".repeat(word.length).split('')
   show[order[0]]=word[order[0]] 
   console.log(Token,GID,word, show, order)
-   client.replyMessage(Token,{type:"text",text:`guess this word and save this person \n ${show.join('')} \n \n you have 90 seconds`})
+   client.replyMessage(Token,{type:"text",text:`guess this word and save this person \n ${show.join('')} \n \n you have 90 seconds`}).then(()=>
    setTimeout(() => { //15 seconds
      if(hangman.includes(GID)){
       if(count(show)>2){
     show[order[1]]=word[order[1]] }
     client.pushMessage(GID,{type:"text",text:`75 seconds left! \n ${show.join('')} \n \n \n / `})
-  }else{return}}, 15000)
+  }else{return}}, 15000)).then(()=>
    setTimeout(()=>{
       // 30 seconds
     if(count(show)>2){
     show[order[2]]=word[order[2]] }
      client.pushMessage(GID,{type:"text",text:`60 seconds left! \n ${show.join('')} \n\n  \n / \\`})
-   },30000)
+   },15000)).then(()=>
    setTimeout(()=>{
     if(hangman.includes(GID)){ // 45 seconds
    if(count(show)>2){
    show[order[3]]=word[order[3]] }
     client.pushMessage(GID,{type:"text",text:`45 seconds left! \n ${show.join('')}\n\n  |\n / \\ `})
-  }else{return}},45000)
+  }else{return}},15000)).then(()=>
   setTimeout(()=>{
     if(hangman.includes(GID)){ // 60 seconds
    if(count(show)>2){
    show[order[4]]=word[order[4]] }
     client.pushMessage(GID,{type:"text",text:`30 seconds left! \n ${show.join('')}\n\n /|\n / \\ `})
-  }else{return}},60000)
+  }else{return}},15000)).then(()=>
   setTimeout(()=>{
     if(hangman.includes(GID)){ // 75 seconds
    if(count(show)>2){
    show[order[5]]=word[order[5]] }
     client.pushMessage(GID,{type:"text",text:`15 seconds left! \n ${show.join('')}\n\n /|\\\n / \\ `})
-  }else{return}},75000)
+  }else{return}},15000)).then(()=>
   setTimeout(()=>{ //dead
     if(hangman.includes(GID)){
      client.pushMessage(GID,{type:'text',text:`owh no he is dead! the answer is ${word} \n\n  |\n  X\n /|\\\n / \\ `})
     hangman.splice(hangman.indexOf(GID),1);
     return
-  }return},90000);
+  }return},15000));
   setInterval(() => {
     if(!hangman.includes(GID)){return;}
   }, 2000);
+  return
 }
 
   if (event.type !== 'message' || event.message.type !== 'text') {
@@ -135,7 +136,7 @@ for (let i = 0;i<data.length; i++) {
   console.log(cmd)
   switch(cmd){
     case "help": //show help message
-     client.replyMessage(event.replyToken,{type:'text',text: `available commands: \n ${PREFIX}help: show this message \n ${PREFIX}picture: search picture using google search engine \n ${PREFIX}echo : reply back the message after the command \n ${PREFIX}chatbot : to see chatbot status or turn on or off \n ${PREFIX}invite : to show the invite link of the bot\n \n creator:JZ9`})
+     client.replyMessage(event.replyToken,{type:'text',text: `available commands: \n ${PREFIX}help: show this message \n ${PREFIX}picture: search picture using google search engine \n ${PREFIX}echo : reply back the message after the command \n ${PREFIX}chatbot : to see chatbot status or turn on or off \n ${PREFIX}invite : to show the invite link of the bot \n ${PREFIX}hangman: play hangman(still buggy)\n \n creator:JZ9`})
       break;
 
       case "picture": //picture search feature
