@@ -114,7 +114,7 @@ for (let i = 0;i<data.length; i++) {
     setTimeout(()=>{ //dead
       if(cache.hangman[GID][gameid]){
        client.pushMessage(GID,{type:'text',text:`owh no he is dead! \nthe answer is ${word} \n\n  |\n  X\n /|\\\n / \\ `})
-       cache["hangman"][GID]=[]
+       cache["hangman"][GID]=undefined
       return
     }else{return}
   },15000)
@@ -197,10 +197,10 @@ for (let i = 0;i<data.length; i++) {
         switch(args[0]){
             case"stop":
             client.pushMessage(event.source.groupId,{type:'text',text:`hangman game has been stopped`})
-            cache["hangman"][event.source.groupId]=[] 
+            cache["hangman"][event.source.groupId]=undefined
             ;break;
         default:
-        if(cache.hangman[event.source.groupId]!=undefined||null||[]){client.pushMessage(event.source.groupId,{type:'text',text:`the game have already running, to stop it use ${PREFIX}hangman stop`});return};
+        if(cache.hangman[event.source.groupId]!=undefined||null){client.pushMessage(event.source.groupId,{type:'text',text:`the game have already running, to stop it use ${PREFIX}hangman stop`});return};
         var wordId=Math.floor(Math.random()*words.length)
         console.log(words[wordId])
         var id=Math.floor(Math.random()*1000000)
@@ -214,7 +214,7 @@ default:
     if(event.message.text==cache.hangman[event.source.groupId][cache.hangman[event.source.groupId][0]]){
       client.getProfile(event.source.userId).then((data)=>{
       client.pushMessage(event.source.groupId,{type:'text',text:`${data.displayName} answer's is correct \n${cache.hangman[event.source.groupId][cache.hangman[event.source.groupId][0]]}`})
-      cache.hangman[event.source.groupId]=[]  
+      cache.hangman[event.source.groupId]=undefined
       return})
      }else{client.pushMessage(event.source.groupId,{type:'text',text:`incorrect!`});}
       }     
