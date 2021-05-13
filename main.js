@@ -59,8 +59,9 @@ fetch(`https://api.line.me/v2/bot/info`,{
 
 // event handlers
 function handleEvent(data) {
-  console.log(cache.hangman[event.source.groupId])
+  
 var event=JSON.parse(JSON.stringify(data))
+console.log(cache.hangman[event.source.groupId])
 //hangman game
 function hangmangame(Token,GID,word,gameid){
   //count '-'
