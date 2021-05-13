@@ -200,13 +200,13 @@ for (let i = 0;i<data.length; i++) {
             cache["hangman"][event.source.groupId]=[] 
             ;break;
         default:
-        if(cache.hangman[event.source.groupId]!==[]){client.pushMessage(event.source.groupId,{type:'text',text:`the game have already running, to stop it use ${PREFIX}hangman stop`});return};
+        if(cache.hangman[event.source.groupId]==[]){;
         var wordId=Math.floor(Math.random()*words.length)
         console.log(words[wordId])
         var id=Math.floor(Math.random()*1000000)
         assigncache("hangman",event.source.groupId,id,words[wordId])
         hangmangame(event.replyToken,event.source.groupId,words[wordId],id)
-          }
+        }else{client.pushMessage(event.source.groupId,{type:'text',text:`the game have already running, to stop it use ${PREFIX}hangman stop`});return}}
         ;break;
 default:
   console.log(event.message.text)
