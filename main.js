@@ -64,7 +64,11 @@ function handleEvent(data) {
 var event=JSON.parse(JSON.stringify(data))
 console.log(cache.hangman[event.source.groupId])
 //hangman game
-function hangmangame(Token,GID,word,gameid,timer){
+function hangmangame(Token,GID,word,gameid){
+  var timer
+  if(cache.hangman.timer[event.source.groupId]==null||undefined){
+  timer=15000
+  }else{timer=cache.hangman.timer[event.source.groupId]}
   //count '-'
   function count(data){
     let counter = 0;
@@ -215,7 +219,7 @@ for (let i = 0;i<data.length; i++) {
         console.log(words[wordId])
         var id=Math.floor(Math.random()*1000000)
         assigncache("hangman",event.source.groupId,id,words[wordId])
-        hangmangame(event.replyToken,event.source.groupId,words[wordId],id,cache.hangman.timer[event.source.groupId]||15000)
+        hangmangame(event.replyToken,event.source.groupId,words[wordId],id)
           }
         ;break;
 default:
