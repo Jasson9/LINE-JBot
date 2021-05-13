@@ -65,9 +65,9 @@ console.log(cache.hangman[event.source.groupId])
 //hangman game
 function hangmangame(Token,GID,word,gameid){
   var timer
-  if(cache.hangman.timer[GID]==null||undefined){
-  timer=15000
-  }else{timer=cache.hangman.timer[event.source.groupId]}
+  if(cache.hangman.timer[GID]!=undefined||null){
+  timer=cache.hangman.timer[GID]
+  }else{timer=15000}
   //count '-'
   function count(data){
     let counter = 0;
