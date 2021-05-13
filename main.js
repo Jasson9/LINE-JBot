@@ -14,7 +14,7 @@ var chatbot =[]
 const botname =process.env.BOTNAME
 const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
 var words=["hello","dictionary","intelligent","respect","beautiful","problem","help","shock","wealthy","zigzag","destiny","destination","simple","answer","combination","serious","colour","meaningless","amazing","repeat","profile","teams","underestimate","impossible","training","predictable","celebrate","unknown","alone","prepare","something","lower","love","control","confirmation","confirm","end","delight","afraid","height","setting","junior","senior","apply","master","verify","handle","harvest","people","jealous","happy","memory","deny","abort","style","school","global","pandemic","quarantine"]
-var cache ={"hangman":{}}
+var cache ={"hangman":{'timer':{}}}
 console.log(cache.hangman.timer||90)
 // LINE SDK config from env variables
 const config = {
