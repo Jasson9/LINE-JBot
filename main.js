@@ -59,7 +59,7 @@ fetch(`https://api.line.me/v2/bot/info`,{
 
 // event handlers
 function handleEvent(data) {
-  console.log(cache.hangman)
+  console.log(cache.hangman[event.source.groupId])
 var event=JSON.parse(JSON.stringify(data))
 //hangman game
 function hangmangame(Token,GID,word,gameid){
@@ -199,7 +199,7 @@ for (let i = 0;i<data.length; i++) {
             cache["hangman"][event.source.groupId]=[] 
             ;break;
         default:
-        if(!cache.hangman[event.source.groupId]==[]){client.pushMessage(event.source.groupId,{type:'text',text:`the game have already running, to stop it use ${PREFIX}hangman stop`});return};
+        if(cache.hangman[event.source.groupId]){client.pushMessage(event.source.groupId,{type:'text',text:`the game have already running, to stop it use ${PREFIX}hangman stop`});return};
         var wordId=Math.floor(Math.random()*words.length)
         console.log(words[wordId])
         var id=Math.floor(Math.random()*1000000)
