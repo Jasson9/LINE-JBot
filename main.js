@@ -86,25 +86,25 @@ for (let i = 0;i<data.length; i++) {
    client.replyMessage(Token,{type:"text",text:`guess this word and save this person \n${show.join('')} \n \n you have ${timer*6/1000} seconds`})
 
    setTimeout(() => { //15 seconds
-     if(cache.hangman[GID].includes(gameid)){
+     if(cache.hangman[GID][gameid]){
       if(count(show)>2){
     show[order[1]]=word[order[1]]} 
     client.pushMessage(GID,{type:"text",text:`${timer*5/1000} seconds left! \n${show.join('')} \n \n \n / `})
 
    setTimeout(()=>{ // 30 seconds
-    if(cache.hangman[GID].includes(gameid)){
+    if(cache.hangman[GID][gameid]){
     if(count(show)>2){
     show[order[2]]=word[order[2]]} 
      client.pushMessage(GID,{type:"text",text:`${timer*4/1000} seconds left! \n${show.join('')} \n\n  \n / \\`})
 
      setTimeout(()=>{
-      if(cache.hangman[GID].includes(gameid)){ // 45 seconds
+      if(cache.hangman[GID][gameid]){ // 45 seconds
      if(count(show)>2){
      show[order[3]]=word[order[3]] }
       client.pushMessage(GID,{type:"text",text:`${timer*3/1000} seconds left! \n${show.join('')}\n\n  |\n / \\ `})
   
     setTimeout(()=>{
-      if(cache.hangman[GID].includes(gameid)){ // 60 seconds
+      if(cache.hangman[GID][gameid]){ // 60 seconds
      if(count(show)>2){
      show[order[4]]=word[order[4]] }
       client.pushMessage(GID,{type:"text",text:`${timer*2/1000} seconds left! \n${show.join('')}\n\n /|\n / \\ `})
@@ -116,9 +116,9 @@ for (let i = 0;i<data.length; i++) {
       client.pushMessage(GID,{type:"text",text:`${timer/1000} seconds left! \n${show.join('')}\n\n /|\\\n / \\ `})
       
     setTimeout(()=>{ //dead
-      if(cache.hangman[GID].includes(gameid)){
+      if(cache.hangman[GID][gameid]){
        client.pushMessage(GID,{type:'text',text:`owh no he is dead! \nthe answer is ${word} \n\n  |\n  X\n /|\\\n / \\ `})
-       cache["hangman"][GID]=undefined
+       cache["hangman"][GID]=null
       return
     }else{return}
   },timer)
@@ -201,7 +201,7 @@ for (let i = 0;i<data.length; i++) {
         switch(args[0]){
             case"stop":
             client.pushMessage(event.source.groupId,{type:'text',text:`hangman game has been stopped`})
-            cache["hangman"][event.source.groupId]=undefined
+            cache["hangman"][event.source.groupId]=null
             ;break;
             case"time":
             if(isNaN(args[1])){client.replyMessage(event.replyToken,{type:'text',text:`please input the time number in seconds after the command`});return}else{
@@ -227,7 +227,7 @@ default:
     if(event.message.text==cache.hangman[event.source.groupId][cache.hangman[event.source.groupId][0]]){
       client.getProfile(event.source.userId).then((data)=>{
       client.pushMessage(event.source.groupId,{type:'text',text:`${data.displayName} answer's is correct \n${cache.hangman[event.source.groupId][cache.hangman[event.source.groupId][0]]}`})
-      cache.hangman[event.source.groupId]=undefined
+      cache.hangman[event.source.groupId]=null
       return})
      }else{client.pushMessage(event.source.groupId,{type:'text',text:`incorrect!`});}
       }     
