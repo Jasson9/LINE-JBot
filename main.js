@@ -14,7 +14,7 @@ var chatbot =[]
 const botname =process.env.BOTNAME
 const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
 var words=["hello","dictionary","intelligent","respect","beautiful","problem","help","shock","wealthy","zigzag","destiny","destination","simple","answer","combination","serious","colour","meaningless","amazing","repeat","profile","teams","underestimate","impossible","training","predictable","celebrate","unknown","alone","prepare","something","lower","love","control","confirmation","confirm","end","delight","afraid","height","setting","junior","senior","apply","master","verify","handle","harvest","people","jealous","happy","memory","deny","abort","style","school","global","pandemic","quarantine"]
-var cache ={"hangman":{'timer':{}}}
+var cache ={"hangman":{}}
 // LINE SDK config from env variables
 const config = {
   channelAccessToken: "Uo3gYpv3LTd/nKHdYIz1/gqzKxk/rddQi9W+d4bCCG6z+1PIae8euhOo8WGome1shyh/wD9Brn8YnzQtDp5uekxl5H1hSWHW2ot3dbhfyK0h1cfiAatZfO1wNYq44T1jsbO/IYVyLuea4bfd38+oAQdB04t89/1O/w1cDnyilFU="||process.env.CHANNEL_ACCESS_TOKEN || defaultAccessToken,
@@ -64,10 +64,10 @@ var event=JSON.parse(JSON.stringify(data))
 console.log(cache.hangman[event.source.groupId])
 //hangman game
 function hangmangame(Token,GID,word,gameid){
-  var timer
-  if(cache.hangman.timer[GID]!=undefined||null){
-  timer=cache.hangman.timer[GID]
-  }else{timer=15000}
+  var timer =15000
+//  if(cache.hangman.timer[GID]){
+//  timer=cache.hangman.timer[GID]
+//  }else{timer=15000}
   //count '-'
   function count(data){
     let counter = 0;
