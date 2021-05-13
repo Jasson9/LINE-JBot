@@ -15,6 +15,7 @@ const botname =process.env.BOTNAME
 const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
 var words=["hello","dictionary","intelligent","respect","beautiful","problem","help","shock","wealthy","zigzag","destiny","destination","simple","answer","combination","serious","colour","meaningless","amazing","repeat","profile","teams","underestimate","impossible","training","predictable","celebrate","unknown","alone","prepare","something","lower","love","control","confirmation","confirm","end","delight","afraid","height","setting","junior","senior","apply","master","verify","handle","harvest","people","jealous","happy","memory","deny","abort","style","school","global","pandemic","quarantine"]
 var cache ={"hangman":{}}
+console.log(cache.hangman.timer||90)
 // LINE SDK config from env variables
 const config = {
   channelAccessToken: "Uo3gYpv3LTd/nKHdYIz1/gqzKxk/rddQi9W+d4bCCG6z+1PIae8euhOo8WGome1shyh/wD9Brn8YnzQtDp5uekxl5H1hSWHW2ot3dbhfyK0h1cfiAatZfO1wNYq44T1jsbO/IYVyLuea4bfd38+oAQdB04t89/1O/w1cDnyilFU="||process.env.CHANNEL_ACCESS_TOKEN || defaultAccessToken,
@@ -63,7 +64,7 @@ function handleEvent(data) {
 var event=JSON.parse(JSON.stringify(data))
 console.log(cache.hangman[event.source.groupId])
 //hangman game
-function hangmangame(Token,GID,word,gameid){
+function hangmangame(Token,GID,word,gameid,timer){
   //count '-'
   function count(data){
     let counter = 0;
@@ -117,17 +118,17 @@ for (let i = 0;i<data.length; i++) {
        cache["hangman"][GID]=undefined
       return
     }else{return}
-  },15000)
+  },timer/6)
 }else{return}
-  },15000)
+  },timer/6)
 }else{return}
-  },15000)
+  },timer/6)
 }else{return}
-  },15000)  
+  },timer/6)  
 }else{return}
-  },15000)
+  },timer/6)
 }else{return}
-  }, 15000);
+  }, timer/6);
   return
 }
 
@@ -199,13 +200,18 @@ for (let i = 0;i<data.length; i++) {
             client.pushMessage(event.source.groupId,{type:'text',text:`hangman game has been stopped`})
             cache["hangman"][event.source.groupId]=undefined
             ;break;
+            case"time":
+            if(isNaN(args[1])){client.replyMessage(event.replyToken,{type:'text',text:`please input the time number in seconds`})}else{
+              assigncache("hangman","timer",event.source.groupId,args[1]*1000)
+            }
+            ;break;
         default:
         if(cache.hangman[event.source.groupId]!=undefined||null){client.pushMessage(event.source.groupId,{type:'text',text:`the game have already running, to stop it use ${PREFIX}hangman stop`});return};
         var wordId=Math.floor(Math.random()*words.length)
         console.log(words[wordId])
         var id=Math.floor(Math.random()*1000000)
         assigncache("hangman",event.source.groupId,id,words[wordId])
-        hangmangame(event.replyToken,event.source.groupId,words[wordId],id)
+        hangmangame(event.replyToken,event.source.groupId,words[wordId],id,cache.hangman.timer[event.source.groupId]||90)
           }
         ;break;
 default:
