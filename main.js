@@ -24,17 +24,14 @@ const config = {
 const client = new line.Client(config);
 
 //assign cache data function
-function assigncache(activity,GID,ID,data,data2){
+function assigncache(activity,GID,ID,data){
 if(activity&&GID){
 cache[activity]=[GID]
   if(ID){
     cache[activity][GID]=[ID]
-    if(data&&!data2){
-      cache[activity][GID][ID]=data
-      }else{
-    if(data1&&data2){
-        cache[activity][GID][ID]=data2
-      }}
+    if(data){
+      cache[activity][GID][ID]=data   
+   }
     }
   }return
 }
@@ -65,7 +62,7 @@ function handleEvent(data) {
   console.log(cache.hangman)
 var event=JSON.parse(JSON.stringify(data))
 //hangman game
-function hangmangame(Token,GID,word,ID){
+function hangmangame(Token,GID,word,gameid){
   //count '-'
   function count(data){
     let counter = 0;
@@ -84,39 +81,39 @@ for (let i = 0;i<data.length; i++) {
    client.replyMessage(Token,{type:"text",text:`guess this word and save this person \n${show.join('')} \n \n you have 90 seconds`})
 
    setTimeout(() => { //15 seconds
-     if(cache.hangman[GID].includes(ID)){
+     if(cache.hangman[GID][gameid]){
       if(count(show)>2){
     show[order[1]]=word[order[1]]} 
     client.pushMessage(GID,{type:"text",text:`75 seconds left! \n${show.join('')} \n \n \n / `})
 
    setTimeout(()=>{ // 30 seconds
-    if(cache.hangman[GID].includes(ID)){
+    if(cache.hangman[GID][gameid]){
     if(count(show)>2){
     show[order[2]]=word[order[2]]} 
      client.pushMessage(GID,{type:"text",text:`60 seconds left! \n${show.join('')} \n\n  \n / \\`})
 
      setTimeout(()=>{
-      if(cache.hangman[GID].includes(ID)){ // 45 seconds
+      if(cache.hangman[GID][gameid]){ // 45 seconds
      if(count(show)>2){
      show[order[3]]=word[order[3]] }
       client.pushMessage(GID,{type:"text",text:`45 seconds left! \n${show.join('')}\n\n  |\n / \\ `})
   
     setTimeout(()=>{
-      if(cache.hangman[GID].includes(ID)){ // 60 seconds
+      if(cache.hangman[GID][gameid]){ // 60 seconds
      if(count(show)>2){
      show[order[4]]=word[order[4]] }
       client.pushMessage(GID,{type:"text",text:`30 seconds left! \n${show.join('')}\n\n /|\n / \\ `})
     
     setTimeout(()=>{
-      if(cache.hangman[GID].includes(ID)){ // 75 seconds
+      if(cache.hangman[GID][gameid]){ // 75 seconds
      if(count(show)>2){
      show[order[5]]=word[order[5]] }
       client.pushMessage(GID,{type:"text",text:`15 seconds left! \n${show.join('')}\n\n /|\\\n / \\ `})
       
     setTimeout(()=>{ //dead
-      if(cache.hangman[GID].includes(ID)){
+      if(cache.hangman[GID][gameid]){
        client.pushMessage(GID,{type:'text',text:`owh no he is dead! \nthe answer is ${word} \n\n  |\n  X\n /|\\\n / \\ `})
-       cache.hangman[event.source.groupId]=""
+       cache["hangman"][GID]=[]
       return
     }else{return}
   },15000)
@@ -199,10 +196,10 @@ for (let i = 0;i<data.length; i++) {
         switch(args[0]){
             case"stop":
             client.pushMessage(event.source.groupId,{type:'text',text:`hangman game has been stopped`})
-            cache.hangman[event.source.groupId]=""
+            cache["hangman"][event.source.groupId]=[] 
             ;break;
         default:
-        if(cache.hangman[event.source.groupId]!==""){client.pushMessage(event.source.groupId,{type:'text',text:`the game have already running, to stop it use ${PREFIX}hangman stop`});return};
+        if(cache.hangman[event.source.groupId]){client.pushMessage(event.source.groupId,{type:'text',text:`the game have already running, to stop it use ${PREFIX}hangman stop`});return};
         var wordId=Math.floor(Math.random()*words.length)
         console.log(words[wordId])
         var id=Math.floor(Math.random()*1000000)
@@ -212,11 +209,11 @@ for (let i = 0;i<data.length; i++) {
         ;break;
 default:
   console.log(event.message.text)
-  if(cache.hangman[event.source.groupId]!==""){
-    if(event.message.text==cache.hangman[event.source.groupId][cache.hangman[event.source.groupId][0]][0]){
+  if(cache.hangman[event.source.groupId]){
+    if(event.message.text==cache.hangman[event.source.groupId][cache.hangman[event.source.groupId][0]]){
       client.getProfile(event.source.userId).then((data)=>{
       client.pushMessage(event.source.groupId,{type:'text',text:`${data.displayName} answer's is correct \n${cache.hangman[event.source.groupId][cache.hangman[event.source.groupId][0]][0]}`})
-      cache.hangman[event.source.groupId]=""     
+      cache.hangman[event.source.groupId]=[]  
       return})
      }else{client.pushMessage(event.source.groupId,{type:'text',text:`incorrect!`});}
       }     
