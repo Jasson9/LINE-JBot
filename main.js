@@ -80,37 +80,37 @@ for (let i = 0;i<data.length; i++) {
   var show = "-".repeat(word.length).split('')
   show[order[0]]=word[order[0]] 
   console.log(Token,GID,word, show, order)
-   client.replyMessage(Token,{type:"text",text:`guess this word and save this person \n${show.join('')} \n \n you have 90 seconds`})
+   client.replyMessage(Token,{type:"text",text:`guess this word and save this person \n${show.join('')} \n \n you have ${timer*6} seconds`})
 
    setTimeout(() => { //15 seconds
      if(cache.hangman[GID][gameid]){
       if(count(show)>2){
     show[order[1]]=word[order[1]]} 
-    client.pushMessage(GID,{type:"text",text:`75 seconds left! \n${show.join('')} \n \n \n / `})
+    client.pushMessage(GID,{type:"text",text:`${timer*5} seconds left! \n${show.join('')} \n \n \n / `})
 
    setTimeout(()=>{ // 30 seconds
     if(cache.hangman[GID][gameid]){
     if(count(show)>2){
     show[order[2]]=word[order[2]]} 
-     client.pushMessage(GID,{type:"text",text:`60 seconds left! \n${show.join('')} \n\n  \n / \\`})
+     client.pushMessage(GID,{type:"text",text:`${timer*4} seconds left! \n${show.join('')} \n\n  \n / \\`})
 
      setTimeout(()=>{
       if(cache.hangman[GID][gameid]){ // 45 seconds
      if(count(show)>2){
      show[order[3]]=word[order[3]] }
-      client.pushMessage(GID,{type:"text",text:`45 seconds left! \n${show.join('')}\n\n  |\n / \\ `})
+      client.pushMessage(GID,{type:"text",text:`${timer*3} seconds left! \n${show.join('')}\n\n  |\n / \\ `})
   
     setTimeout(()=>{
       if(cache.hangman[GID][gameid]){ // 60 seconds
      if(count(show)>2){
      show[order[4]]=word[order[4]] }
-      client.pushMessage(GID,{type:"text",text:`30 seconds left! \n${show.join('')}\n\n /|\n / \\ `})
+      client.pushMessage(GID,{type:"text",text:`${timer*2} seconds left! \n${show.join('')}\n\n /|\n / \\ `})
     
     setTimeout(()=>{
       if(cache.hangman[GID][gameid]){ // 75 seconds
      if(count(show)>2){
      show[order[5]]=word[order[5]] }
-      client.pushMessage(GID,{type:"text",text:`15 seconds left! \n${show.join('')}\n\n /|\\\n / \\ `})
+      client.pushMessage(GID,{type:"text",text:`${timer} seconds left! \n${show.join('')}\n\n /|\\\n / \\ `})
       
     setTimeout(()=>{ //dead
       if(cache.hangman[GID][gameid]){
@@ -118,17 +118,17 @@ for (let i = 0;i<data.length; i++) {
        cache["hangman"][GID]=undefined
       return
     }else{return}
-  },timer/6)
+  },timer)
 }else{return}
-  },timer/6)
+  },timer)
 }else{return}
-  },timer/6)
+  },timer)
 }else{return}
-  },timer/6)  
+  },timer)  
 }else{return}
-  },timer/6)
+  },timer)
 }else{return}
-  }, timer/6);
+  }, timer);
   return
 }
 
@@ -201,17 +201,20 @@ for (let i = 0;i<data.length; i++) {
             cache["hangman"][event.source.groupId]=undefined
             ;break;
             case"time":
-            if(isNaN(args[1])){client.replyMessage(event.replyToken,{type:'text',text:`please input the time number in seconds`})}else{
-              assigncache("hangman","timer",event.source.groupId,args[1]*1000)
+            if(isNaN(args[1])){client.replyMessage(event.replyToken,{type:'text',text:`please input the time number in seconds after the command`});return}else{
+              if(args[1]<60){client.replyMessage(event.replyToken,{type:"text",text:"too short need more than 60 seconds"});return}else{
+              assigncache("hangman","timer",event.source.groupId,args[1]*1000)}
             }
             ;break;
+            case"help":
+            client.replyMessage(event.replyToken,{type:'text',text:`hangman help \n- to play the game use ${PREFIX}hangman \n- to stop game use ${PREFIX}hangman stop \n- to set timer use ${PREFIX}hangman timer <numbers> \n\nabout:\nhangman is a guessing word game that race againts the time with purpose to save the person from getting hanged`})
         default:
         if(cache.hangman[event.source.groupId]!=undefined||null){client.pushMessage(event.source.groupId,{type:'text',text:`the game have already running, to stop it use ${PREFIX}hangman stop`});return};
         var wordId=Math.floor(Math.random()*words.length)
         console.log(words[wordId])
         var id=Math.floor(Math.random()*1000000)
         assigncache("hangman",event.source.groupId,id,words[wordId])
-        hangmangame(event.replyToken,event.source.groupId,words[wordId],id,cache.hangman.timer[event.source.groupId]||90)
+        hangmangame(event.replyToken,event.source.groupId,words[wordId],id,Math.floor(cache.hangman.timer[event.source.groupId]/6)||15)
           }
         ;break;
 default:
