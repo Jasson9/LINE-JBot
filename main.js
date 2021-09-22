@@ -3,26 +3,31 @@ const GoogleImages = require('google-images');
 const line = require('@line/bot-sdk');
 const express = require('express');
 const fetch = require("node-fetch").default;    
-const GIMG = new GoogleImages(process.env.CSE_ID||'9158f798cdfa53799', process.env.G_API_KEY||'AIzaSyAG6gTt_12cJjlqBUH6-bq8PxVMGkEG69I');
+const yandeximages = require("yandex-images");
 const defaultAccessToken = '***********************';
 const defaultSecret = '***********************';
 const path = require('path');
+let engine = process.env.SEARCH_ENGINE||'yandex'
 //settings
+const GIMG = new GoogleImages(process.env.CSE_ID||'9158f798cdfa53799', process.env.G_API_KEY||'AIzaSyAG6gTt_12cJjlqBUH6-bq8PxVMGkEG69I');
 const PREFIX =process.env.PREFIX||"."
 var chatbot ="off"
 var chatbot =[]
 const botname =process.env.BOTNAME
 const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
 var words=["hello","dictionary","intelligent","respect","beautiful","problem","help","shock","wealthy","zigzag","destiny","destination","simple","answer","combination","serious","colour","meaningless","amazing","repeat","profile","teams","underestimate","impossible","training","predictable","celebrate","unknown","alone","prepare","something","lower","love","control","confirmation","confirm","end","delight","afraid","height","setting","junior","senior","apply","master","verify","handle","harvest","people","jealous","happy","memory","deny","abort","style","school","global","pandemic","quarantine"]
-var cache ={"hangman":{}}
+var cache ={hangman:{}}
 // LINE SDK config from env variables
 const config = {
   channelAccessToken: "Uo3gYpv3LTd/nKHdYIz1/gqzKxk/rddQi9W+d4bCCG6z+1PIae8euhOo8WGome1shyh/wD9Brn8YnzQtDp5uekxl5H1hSWHW2ot3dbhfyK0h1cfiAatZfO1wNYq44T1jsbO/IYVyLuea4bfd38+oAQdB04t89/1O/w1cDnyilFU="||process.env.CHANNEL_ACCESS_TOKEN || defaultAccessToken,
   channelSecret: process.env.CHANNEL_SECRET || defaultSecret,
 };
 // create LINE SDK client
+var num ="test"
 const client = new line.Client(config);
-
+//cache.hangman["test"]=null
+console.log(cache.hangman["test"])
+//console.log(cache.hangman["test"]["test"]).catch(err=>{console.log(err)})
 //assign cache data function
 function assigncache(activity,GID,ID,data){
 if(activity&&GID){
@@ -35,6 +40,7 @@ cache[activity]=[GID]
     }
   }return
 }
+
 
 // create Express app
 // about Express itself: https://expressjs.com/
@@ -118,7 +124,7 @@ for (let i = 0;i<data.length; i++) {
     setTimeout(()=>{ //dead
       if(cache.hangman[GID][gameid]){
        client.pushMessage(GID,{type:'text',text:`owh no he is dead! \nthe answer is ${word} \n\n  |\n  X\n /|\\\n / \\ `})
-       cache["hangman"][GID]=null
+       cache.hangman[GID]=''
       return
     }else{return}
   },timer)
@@ -145,6 +151,7 @@ for (let i = 0;i<data.length; i++) {
 
   if(!event.message.text.slice(0).includes(`${PREFIX}`)){cmd=undefined//if the message has no prefix then use the chatbot if on and return no command
   if(chatbot.includes(event.source.groupId)){
+    //snowflake chatbot API (Deprecated)
     fetch(`https://api.snowflakedev.xyz/api/chatbot?message=${encodeURIComponent(event.message.text)}&name=${botname}`, {
         headers: {
             "Authorization": CBAuth        
@@ -164,15 +171,23 @@ for (let i = 0;i<data.length; i++) {
      client.replyMessage(event.replyToken,{type:'text',text: `available commands: \n ${PREFIX}help: show this message \n ${PREFIX}picture: search picture using google search engine \n ${PREFIX}echo : reply back the message after the command \n ${PREFIX}chatbot : to see chatbot status or turn on or off \n ${PREFIX}invite : to show the invite link of the bot \n ${PREFIX}hangman: play hangman(still buggy)\n \n creator:JZ9`})
       break;
 
-      case "picture": //picture search feature
+      case "picture"||"image"||"insert": //picture search feature
         if(!args[0]){client.replyMessage(event.replyToken,{type:'text',text:"no keyword"});return}
+        var keyword =  args[0]
+        var imgurl
         try{
-          
+        if(engine=="yandex"){
+        yandeximages.Search(keyword, false, function(url){
+          imgurl=url
+        })}
+        else{
           GIMG.search(args[0]).then(images => {
-          if(!images){client.replyMessage(event.replyToken,{type:'text',text:"request has reached the limit"});return}
-            client.replyMessage(event.replyToken,{type:'image', originalContentUrl:images[0].url,previewImageUrl:images[0].thumbnail.url})
-        }).catch(err)   
-        }
+            if(!images){client.replyMessage(event.replyToken,{type:'text',text:"request has reached the limit (google image search)"});return}
+            imgurl=images[0].url}
+          )}
+            client.replyMessage(event.replyToken,{type:'image', originalContentUrl:url,previewImageUrl:url})
+        }   
+        
         catch(err){if(err){
           console.log(err)}}
         break;
@@ -201,7 +216,7 @@ for (let i = 0;i<data.length; i++) {
         switch(args[0]){
             case"stop":
             client.pushMessage(event.source.groupId,{type:'text',text:`hangman game has been stopped`})
-            cache["hangman"][event.source.groupId]=null
+            cache.hangman[event.source.groupId]=[]
             ;break;
             case"time":
             if(isNaN(args[1])){client.replyMessage(event.replyToken,{type:'text',text:`please input the time number in seconds after the command`});return}else{
@@ -213,7 +228,7 @@ for (let i = 0;i<data.length; i++) {
             case"help":
             client.replyMessage(event.replyToken,{type:'text',text:`hangman help \n- to play the game use ${PREFIX}hangman \n- to stop game use ${PREFIX}hangman stop \n- to set timer use ${PREFIX}hangman timer <numbers> \n\nabout:\nhangman is a guessing word game that race againts the time with purpose to save the person from getting hanged`})
         default:
-        if(cache.hangman[event.source.groupId]!=undefined||null){client.pushMessage(event.source.groupId,{type:'text',text:`the game have already running, to stop it use ${PREFIX}hangman stop`});return};
+        if(cache.hangman[event.source.groupId]!=''){client.pushMessage(event.source.groupId,{type:'text',text:`the game have already running, to stop it use ${PREFIX}hangman stop`});return};
         var wordId=Math.floor(Math.random()*words.length)
         console.log(words[wordId])
         var id=Math.floor(Math.random()*1000000)
@@ -226,8 +241,8 @@ default:
   if(cache.hangman[event.source.groupId]){
     if(event.message.text==cache.hangman[event.source.groupId][cache.hangman[event.source.groupId][0]]){
       client.getProfile(event.source.userId).then((data)=>{
-      client.pushMessage(event.source.groupId,{type:'text',text:`${data.displayName} answer's is correct \n${cache.hangman[event.source.groupId][cache.hangman[event.source.groupId][0]]}`})
-      cache.hangman[event.source.groupId]=null
+      client.pushMessage(event.source.groupId,{type:'text',text:`${data.displayName}'s answer is correct \n${cache.hangman[event.source.groupId][cache.hangman[event.source.groupId][0]]}`})
+      cache.hangman[event.source.groupId]=[]
       return})
      }else{client.pushMessage(event.source.groupId,{type:'text',text:`incorrect!`});}
       }     
