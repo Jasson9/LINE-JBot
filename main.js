@@ -1,4 +1,3 @@
-'use strict';
 const GoogleImages = require('google-images');
 const line = require('@line/bot-sdk');
 const express = require('express');

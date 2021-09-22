@@ -8,7 +8,7 @@
   "test": "echo \"Error: no test specified\" && exit 1"
  },
  "dependencies": {
-  "@line/bot-sdk": "^7.2.0",
+  "@line/bot-sdk": "^7.4.0",
   "cheerio": "^1.0.0-rc.6",
   "crypto": "^1.0.1",
   "curl": "^0.1.4",
@@ -17,6 +17,7 @@
   "google-images": "^2.1.0",
   "got": "^9.6.0",
   "node-fetch": "^2.6.1",
-  "unirest": "^0.6.0"
+  "unirest": "^0.6.0",
+  "yandex-images": "^1.0.7"
  }
 }
