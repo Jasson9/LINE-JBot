@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+# ignored idea
+ignored/
+key.pem
+cert.pem
+test.js
