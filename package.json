@@ -18,6 +18,8 @@
   "got": "^9.6.0",
   "node-fetch": "^2.6.1",
   "unirest": "^0.6.0",
-  "yandex-images": "^1.0.7"
+  "yandex-images": "^1.0.7",
+  "yt-search": "^2.10.1",
+  "ytdl-core": "^4.9.1"
  }
 }

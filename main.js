@@ -1,255 +1,89 @@
-const GoogleImages = require('google-images');
 const line = require('@line/bot-sdk');
 const express = require('express');
-const fetch = require("node-fetch").default;    
-const yandeximages = require("yandex-images");
-const defaultAccessToken = '***********************';
-const defaultSecret = '***********************';
 const path = require('path');
-let engine = process.env.SEARCH_ENGINE||'yandex'
+const fs = require('fs');
+const fetch = require("node-fetch").default;
+const { PREFIX,CHANNEL_SECRET, CHANNEL_ACCESS_TOKEN} = require('./util');
 //settings
-const GIMG = new GoogleImages(process.env.CSE_ID||'9158f798cdfa53799', process.env.G_API_KEY||'AIzaSyAG6gTt_12cJjlqBUH6-bq8PxVMGkEG69I');
-const PREFIX =process.env.PREFIX||"."
-var chatbot ="off"
-var chatbot =[]
-const botname =process.env.BOTNAME
-const CBAuth = process.env.SNOWFLAKE_STUDIO_API_KEY||"NjA0NzI3NjQwNzEyMDE5OTg4.MTYxNzg2NzI5Nzc2NQ==.4a0633b474c6ffb858806e961b37143b"
-var words=["hello","dictionary","intelligent","respect","beautiful","problem","help","shock","wealthy","zigzag","destiny","destination","simple","answer","combination","serious","colour","meaningless","amazing","repeat","profile","teams","underestimate","impossible","training","predictable","celebrate","unknown","alone","prepare","something","lower","love","control","confirmation","confirm","end","delight","afraid","height","setting","junior","senior","apply","master","verify","handle","harvest","people","jealous","happy","memory","deny","abort","style","school","global","pandemic","quarantine"]
-var cache ={hangman:{}}
-// LINE SDK config from env variables
-const config = {
-  channelAccessToken: "Uo3gYpv3LTd/nKHdYIz1/gqzKxk/rddQi9W+d4bCCG6z+1PIae8euhOo8WGome1shyh/wD9Brn8YnzQtDp5uekxl5H1hSWHW2ot3dbhfyK0h1cfiAatZfO1wNYq44T1jsbO/IYVyLuea4bfd38+oAQdB04t89/1O/w1cDnyilFU="||process.env.CHANNEL_ACCESS_TOKEN || defaultAccessToken,
-  channelSecret: process.env.CHANNEL_SECRET || defaultSecret,
+const lineconfig = {
+  channelAccessToken: CHANNEL_ACCESS_TOKEN,
+  channelSecret: CHANNEL_SECRET
 };
-// create LINE SDK client
-var num ="test"
-const client = new line.Client(config);
-//cache.hangman["test"]=null
-console.log(cache.hangman["test"])
-//console.log(cache.hangman["test"]["test"]).catch(err=>{console.log(err)})
-//assign cache data function
-function assigncache(activity,GID,ID,data){
-if(activity&&GID){
-cache[activity]=[GID]
-  if(ID){
-    cache[activity][GID]=[ID]
-    if(data){
-      cache[activity][GID][ID]=data   
-   }
-    }
-  }return
+const cmddir = path.join(__dirname,"commands");
+var commands = fs.readdirSync(cmddir);
+commands.forEach(name=>{
+  commands[commands.indexOf(name)]= commands[commands.indexOf(name)].replace(".js","");
 }
-
+  )
+// create LINE SDK client
+const client = new line.Client(lineconfig);
 
 // create Express app
-// about Express itself: https://expressjs.com/
 const app = express();
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname,'/index.html'));
 });
 
 // register a webhook handler with middleware
-// about the middleware, please refer to doc
-app.post('/webhook', line.middleware(config), (req, res) => {
+app.post('/webhook', line.middleware(lineconfig), (req, res) => {
   Promise
     .all(req.body.events.map(handleEvent))
     .then((result) => res.json(result));
 });
 
-//get botId
-var botId
-fetch(`https://api.line.me/v2/bot/info`,{
-  headers:{Authorization: `Bearer ${config.channelAccessToken}`
-}}).then(res=>res.json()).then(data=>{data=JSON.parse(JSON.stringify(data.basicId).replace("@","")),botId=data})
-
 // event handlers
 function handleEvent(data) {
-  
-var event=JSON.parse(JSON.stringify(data))
-console.log(cache.hangman)
-//hangman game
-function hangmangame(Token,GID,word,gameid){
-  var timer =15000
-//  if(cache.hangman.timer[GID]){
-//  timer=cache.hangman.timer[GID]
-//  }else{timer=15000}
-  //count '-'
-  function count(data){
-    let counter = 0;
-for (let i = 0;i<data.length; i++) {
-  if (data[i] == '-'){counter++};
-}return(counter)
-  }
-  var order =[]
-  var i =0
-  while (i<=word.length) {
-  order.push(Math.floor(Math.random()*word.length)),i++
-  };
-  var show = "-".repeat(word.length).split('')
-  show[order[0]]=word[order[0]] 
-  console.log(Token,GID,word, show, order)
-   client.replyMessage(Token,{type:"text",text:`guess this word and save this person \n${show.join('')} \n \n you have ${timer*6/1000} seconds`})
-
-   setTimeout(() => { //15 seconds
-     if(cache.hangman[GID][gameid]){
-      if(count(show)>2){
-    show[order[1]]=word[order[1]]} 
-    client.pushMessage(GID,{type:"text",text:`${timer*5/1000} seconds left! \n${show.join('')} \n \n \n / `})
-
-   setTimeout(()=>{ // 30 seconds
-    if(cache.hangman[GID][gameid]){
-    if(count(show)>2){
-    show[order[2]]=word[order[2]]} 
-     client.pushMessage(GID,{type:"text",text:`${timer*4/1000} seconds left! \n${show.join('')} \n\n  \n / \\`})
-
-     setTimeout(()=>{
-      if(cache.hangman[GID][gameid]){ // 45 seconds
-     if(count(show)>2){
-     show[order[3]]=word[order[3]] }
-      client.pushMessage(GID,{type:"text",text:`${timer*3/1000} seconds left! \n${show.join('')}\n\n  |\n / \\ `})
-  
-    setTimeout(()=>{
-      if(cache.hangman[GID][gameid]){ // 60 seconds
-     if(count(show)>2){
-     show[order[4]]=word[order[4]] }
-      client.pushMessage(GID,{type:"text",text:`${timer*2/1000} seconds left! \n${show.join('')}\n\n /|\n / \\ `})
-    
-    setTimeout(()=>{
-      if(cache.hangman[GID][gameid]){ // 75 seconds
-     if(count(show)>2){
-     show[order[5]]=word[order[5]] }
-      client.pushMessage(GID,{type:"text",text:`${timer/1000} seconds left! \n${show.join('')}\n\n /|\\\n / \\ `})
-      
-    setTimeout(()=>{ //dead
-      if(cache.hangman[GID][gameid]){
-       client.pushMessage(GID,{type:'text',text:`owh no he is dead! \nthe answer is ${word} \n\n  |\n  X\n /|\\\n / \\ `})
-       cache.hangman[GID]=''
-      return
-    }else{return}
-  },timer)
-}else{return}
-  },timer)
-}else{return}
-  },timer)
-}else{return}
-  },timer)  
-}else{return}
-  },timer)
-}else{return}
-  }, timer);
-  return
-}
-
+var event=JSON.parse(JSON.stringify(data));
+console.log(event)
   if (event.type !== 'message' || event.message.type !== 'text') {
     // ignore non-text-message event
     return Promise.resolve(null);
+  };
+  var senderId
+        if(event.source.groupId){
+          senderId=event.source.groupId
+        }else{
+            senderId=event.source.userId
+        }
+  if(event.message.text[0]=="-"){
+    console.log("called")
+     commands.forEach(name=>{
+       try{
+        var command = require(`./commands/${name}.js`); 
+        command.opt(event,client,args);
+       }catch (error) {
+          console.log(error)}
+     })
   }
-
-  var args = event.message.text.split(" ")
-  var cmd = args.shift().replace(PREFIX,"").toLowerCase()
-
+  var args = event.message.text.split(" ");
+  var cmd = args.shift().replace(PREFIX,"").toLowerCase();
   if(!event.message.text.slice(0).includes(`${PREFIX}`)){cmd=undefined//if the message has no prefix then use the chatbot if on and return no command
-  if(chatbot.includes(event.source.groupId)){
-    //snowflake chatbot API (Deprecated)
-    fetch(`https://api.snowflakedev.xyz/api/chatbot?message=${encodeURIComponent(event.message.text)}&name=${botname}`, {
-        headers: {
-            "Authorization": CBAuth        
-        }
+  if(process.env.CHATBOT=="on"&&event.message.text&&event.message.text[0]!=PREFIX){
+    //brainshop AI chatbot
+    fetch(`http://api.brainshop.ai/get?bid=159876&key=7wWuHwap2Xeh0eaE&uid=${event.source.userId}&msg=${encodeURIComponent(event.message.text)}`)
+    .then(res=> res.json())
+    .then(data=>{
+      console.log(data)
+      client.replyMessage(event.replyToken,{type:"text",text:data.cnt})
     })
-        .then(res => res.json())
-        .then(data => {
-          client.replyMessage(event.replyToken,{type:'text',text:data.message});
-        })
-        .catch(e => console.error('An error occured'));
       }}
-    
-  console.log(args)
-  console.log(cmd)
-  switch(cmd){
-    case "help": //show help message
-     client.replyMessage(event.replyToken,{type:'text',text: `available commands: \n ${PREFIX}help: show this message \n ${PREFIX}picture: search picture using google search engine \n ${PREFIX}echo : reply back the message after the command \n ${PREFIX}chatbot : to see chatbot status or turn on or off \n ${PREFIX}invite : to show the invite link of the bot \n ${PREFIX}hangman: play hangman(still buggy)\n \n creator:JZ9`})
-      break;
-
-      case "picture"||"image"||"insert": //picture search feature
-        if(!args[0]){client.replyMessage(event.replyToken,{type:'text',text:"no keyword"});return}
-        var keyword =  args[0]
-        var imgurl
-        try{
-        if(engine=="yandex"){
-        yandeximages.Search(keyword, false, function(url){
-          imgurl=url
-        })}
-        else{
-          GIMG.search(args[0]).then(images => {
-            if(!images){client.replyMessage(event.replyToken,{type:'text',text:"request has reached the limit (google image search)"});return}
-            imgurl=images[0].url}
-          )}
-            client.replyMessage(event.replyToken,{type:'image', originalContentUrl:url,previewImageUrl:url})
-        }   
-        
-        catch(err){if(err){
-          console.log(err)}}
-        break;
-
-      case "echo": //echo/resend the message after ${prefix}echo
-          if(!args[0]){
-            client.replyMessage(event.replyToken,{type:'text',text:"no message specified"});return
-          }
-          client.replyMessage(event.replyToken,{type:'text',text:args.join(" ")});break;
-      case "invite": //add invite feature
-        client.replyMessage(event.replyToken,{type:'text',text:`To invite/add this bot use this url: \n https://line.me/R/ti/p/%40${botId}`});break;
-
-      case "chatbot": //switch on or off for the AI chatbot
-        switch(args[0]){
-          case "off":
-            chatbot.push(event.source.groupId)
-            client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is now ${chatbot}`});
-            break;
-          case "on":
-            chatbot.push(event.source.groupId)
-            client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is now ${chatbot} \n don't expect the responses make sense`});
-            break;
-          default : client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is ${chatbot}`});return
-        }
-      case "hangman":
-        switch(args[0]){
-            case"stop":
-            client.pushMessage(event.source.groupId,{type:'text',text:`hangman game has been stopped`})
-            cache.hangman[event.source.groupId]=[]
-            ;break;
-            case"time":
-            if(isNaN(args[1])){client.replyMessage(event.replyToken,{type:'text',text:`please input the time number in seconds after the command`});return}else{
-              if(args[1]<60){client.replyMessage(event.replyToken,{type:"text",text:"too short need more than 60 seconds"});return}else{
-              assigncache("hangman","timer",event.source.groupId,Math.floor(args[1]*1000/6))
-              client.replyMessage(event.replyToken,{type:"text",text:`time has been set to ${Math.floor(args[1]/6)*6}`})}
-            }
-            ;break;
-            case"help":
-            client.replyMessage(event.replyToken,{type:'text',text:`hangman help \n- to play the game use ${PREFIX}hangman \n- to stop game use ${PREFIX}hangman stop \n- to set timer use ${PREFIX}hangman timer <numbers> \n\nabout:\nhangman is a guessing word game that race againts the time with purpose to save the person from getting hanged`})
-        default:
-        if(cache.hangman[event.source.groupId]!=''){client.pushMessage(event.source.groupId,{type:'text',text:`the game have already running, to stop it use ${PREFIX}hangman stop`});return};
-        var wordId=Math.floor(Math.random()*words.length)
-        console.log(words[wordId])
-        var id=Math.floor(Math.random()*1000000)
-        assigncache("hangman",event.source.groupId,id,words[wordId])
-        hangmangame(event.replyToken,event.source.groupId,words[wordId],id)
-          }
-        ;break;
-default:
-  console.log(event.message.text)
-  if(cache.hangman[event.source.groupId]){
-    if(event.message.text==cache.hangman[event.source.groupId][cache.hangman[event.source.groupId][0]]){
-      client.getProfile(event.source.userId).then((data)=>{
-      client.pushMessage(event.source.groupId,{type:'text',text:`${data.displayName}'s answer is correct \n${cache.hangman[event.source.groupId][cache.hangman[event.source.groupId][0]]}`})
-      cache.hangman[event.source.groupId]=[]
-      return})
-     }else{client.pushMessage(event.source.groupId,{type:'text',text:`incorrect!`});}
-      }     
+  commands.forEach(name => {
+      try {
+       if(name==cmd){
+      var command = require(`./commands/${name}.js`); 
+      command.exec(event,client,args);
       }
-}
-
+  } catch (error) {
+    client.pushMessage(senderId,{type:'text', text:"an error occured"});
+          
+  }
+      }) 
+    };
+  
 // listen on port 3000
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`listening on ${port}`);
 });
+

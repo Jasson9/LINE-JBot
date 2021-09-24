@@ -1,0 +1,8 @@
+{
+    "PREFIX":".",
+    "search_engine":"google",
+    "secret": "",
+    "accesstoken":"",
+    "chatbot":"off",
+    "botName":"JBot"
+}
