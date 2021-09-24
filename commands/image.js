@@ -38,7 +38,9 @@ if(!args[0]){client.replyMessage(event.replyToken,{type:'text',text:"no keyword"
                   if (!parsed_data[1].includes(filtered_domains[0])) {
                     var idx
                     var link = parsed_data[1]
-                    var website = link.replace("https://","").slice(0,link.indexOf("/"))
+                    var i = link.replace("https://","").indexOf("/")
+                    var unhttps = link.replace("https://","")
+                    var website = unhttps.slice(0,i)
                     if(link.replace("https://","").lastIndexOf(website)>website.length){
                       link="https://"+link.slice(link.lastIndexOf(website))
                     }
