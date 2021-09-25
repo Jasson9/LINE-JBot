@@ -1,21 +1,40 @@
 const yandeximages = require("yandex-images");
-var {SEARCH_ENGINE,PREFIX}=require('../util');
+var {IDS}=require('../util');
 const axios = require("axios");
 const pictformats=[".png",".jpeg",".jpg",".gif",".webp"]
 module.exports={
 description:"send image to chat",
-usage:`${PREFIX}image <keyword>`,
-exec(event,client,args){
+usage(SenderID){return`\n${IDS[SenderID].PREFIX}image <keyword> <optional parameters(can be leave blank)>\n\noptional parameters: -e <search engine>\navailable search engine: google and yandex`},
+exec(event,client,SenderID,args){
+  var ID = IDS[SenderID]
 if(!args[0]){client.replyMessage(event.replyToken,{type:'text',text:"no keyword"});return}
-        var keyword =  args.join("");
+        var keyword =args   
         var imgurl
+        var overrideengine
+        console.log(keyword.indexOf("-e"))
+        if(keyword.indexOf("-e")!=-1){
+          var index = keyword.indexOf("-e");
+          overrideengine = keyword[index+1]
+          console.log(overrideengine)
+          keyword[index]=""
+          keyword[index+1]=""
+          }
+        keyword =  keyword.join("  ");
+        console.log(keyword)
+        var engine = overrideengine? overrideengine:ID.SEARCH_ENGINE
+        console.log(engine,typeof engine)
+        if(engine=="yandex"||engine=="google"){
+        }else{
+          client.replyMessage(event.replyToken,{type:'text', text:"search engine not available"});
+        }
+        
         try{
-        if(SEARCH_ENGINE=="yandex"){
+        if(engine=="yandex"){
         yandeximages.Search(keyword, false, function(url){
           imgurl=url
           client.replyMessage(event.replyToken,{type:'image', originalContentUrl:imgurl,previewImageUrl:imgurl});
         })}
-        if(SEARCH_ENGINE=="google"){
+        if(engine=="google"){
           let filtered_domains = ["gstatic.com"];
             const search_query = args.join("+").toLowerCase();
             var formatted_search_url = `https://images.google.com/search?tbm=isch&q=${search_query}`;
@@ -54,6 +73,7 @@ if(!args[0]){client.replyMessage(event.replyToken,{type:'text',text:"no keyword"
                   index++
                   parsed_data = image_search_regex.exec(data);
                 }
+                console.log(imgurl)
                 client.replyMessage(event.replyToken,{type:'image', originalContentUrl:imgurl,previewImageUrl:imgurl});
               })
           }

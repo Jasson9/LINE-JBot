@@ -7,6 +7,7 @@ try {
     config = null;
   }
 
+exports.IDS = IDS;
 exports.PREFIX = process.env.PREFIX||config.PREFIX;
 exports.SEARCH_ENGINE = process.env.SEARCH_ENGINE||config.search_engine;
 exports.CHANNEL_SECRET =process.env.CHANNEL_SECRET||config.secret;

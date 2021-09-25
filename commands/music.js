@@ -1,7 +1,7 @@
-var {PREFIX}=require('../util');
+var {IDS}=require('../util');
 module.exports={
     description:"send audio file based on the youtube search",
-    usage :`${PREFIX}music <keyword> <optional parameter(can be leaved blank)>\noptional parameter: -q <bitrate>\nvalid bitrate are 48, 64, 70, 128, 160 and 256`,
+    usage(SenderID){return`${IDS[SenderID].PREFIX}music <keyword> <optional parameter(can be leaved blank)>\noptional parameter: -q <bitrate>\nvalid bitrate are 48, 64, 70, 128, 160 and 256`},
     exec(event,client,args){
         var keyword = args
         var bitrates = [48,64,70,128,160,256]
@@ -56,5 +56,5 @@ module.exports={
         )})
         ;
 },
-opt(event,client,args){}
+opt(event,client,SenderID,args){}
 }

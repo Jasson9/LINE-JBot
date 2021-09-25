@@ -1,8 +1,8 @@
-const {PREFIX, CHANNEL_ACCESS_TOKEN} = require("../util");
+var {IDS, CHANNEL_ACCESS_TOKEN} = require("../util");
 const fetch = require('../node_modules/node-fetch');
 module.exports={
     description:"show invite bot link to invite bot to another chat",
-    usage:`${PREFIX}invite`,
+    usage(SenderID){return`${IDS[SenderID].PREFIX}invite`},
     exec(event,client){
         var BotId
         fetch(`https://api.line.me/v2/bot/info`,{

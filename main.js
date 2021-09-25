@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const fetch = require("node-fetch").default;
-const { PREFIX,CHANNEL_SECRET, CHANNEL_ACCESS_TOKEN} = require('./util');
+const {IDS,PREFIX,CHANNEL_SECRET, CHANNEL_ACCESS_TOKEN, SEARCH_ENGINE, CBSTATUS} = require('./util');
 //settings
 const lineconfig = {
   channelAccessToken: CHANNEL_ACCESS_TOKEN,
@@ -15,7 +15,8 @@ commands.forEach(name=>{
   commands[commands.indexOf(name)]= commands[commands.indexOf(name)].replace(".js","");
 }
   )
-// create LINE SDK client
+
+  // create LINE SDK client
 const client = new line.Client(lineconfig);
 
 // create Express app
@@ -39,26 +40,31 @@ console.log(event)
     // ignore non-text-message event
     return Promise.resolve(null);
   };
-  var senderId
+  var SenderID
         if(event.source.groupId){
-          senderId=event.source.groupId
+          SenderID=event.source.groupId
         }else{
-            senderId=event.source.userId
+          SenderID=event.source.userId
         }
-  if(event.message.text[0]=="-"){
-    console.log("called")
+    if(!IDS[SenderID]){
+      IDS[SenderID]={
+        "PREFIX":PREFIX,
+        "SEARCH_ENGINE":SEARCH_ENGINE,
+        "CBSTATUS":CBSTATUS
+      }
+    }
+  var args = event.message.text.split(" ");
      commands.forEach(name=>{
        try{
         var command = require(`./commands/${name}.js`); 
-        command.opt(event,client,args);
+        command.opt(event,client,SenderID,args);
        }catch (error) {
           console.log(error)}
      })
-  }
-  var args = event.message.text.split(" ");
-  var cmd = args.shift().replace(PREFIX,"").toLowerCase();
-  if(!event.message.text.slice(0).includes(`${PREFIX}`)){cmd=undefined//if the message has no prefix then use the chatbot if on and return no command
-  if(process.env.CHATBOT=="on"&&event.message.text&&event.message.text[0]!=PREFIX){
+  
+  var cmd = args.shift().replace(IDS[SenderID].PREFIX,"").toLowerCase();
+  if(!event.message.text.slice(0).includes(`${IDS[SenderID].PREFIX}`)){cmd=undefined//if the message has no prefix then use the chatbot if on and return no command
+  if(IDS[SenderID].CBSTATUS=="on"&&event.message.text&&event.message.text[0]!=IDS[SenderID].PREFIX){
     //brainshop AI chatbot
     fetch(`http://api.brainshop.ai/get?bid=159876&key=7wWuHwap2Xeh0eaE&uid=${event.source.userId}&msg=${encodeURIComponent(event.message.text)}`)
     .then(res=> res.json())
@@ -71,11 +77,11 @@ console.log(event)
       try {
        if(name==cmd){
       var command = require(`./commands/${name}.js`); 
-      command.exec(event,client,args);
+      command.exec(event,client,SenderID,args);
       }
   } catch (error) {
-    client.pushMessage(senderId,{type:'text', text:"an error occured"});
-          
+    console.log(error)
+    client.pushMessage(SenderID,{type:'text', text:"an error occured"});
   }
       }) 
     };
