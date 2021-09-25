@@ -1,6 +1,7 @@
 
 let config;
 
+let IDS = {}
 try {
     config = require("./config.json");
   } catch (error) {
