@@ -2,7 +2,7 @@ var {IDS}=require('../util');
 module.exports={
     description:"send audio file based on the youtube search",
     usage(SenderID){return`${IDS[SenderID].PREFIX}music <keyword> <optional parameter(can be leaved blank)>\noptional parameter: -q <bitrate>\nvalid bitrate are 48, 64, 70, 128, 160 and 256`},
-    exec(event,client,args){
+    exec(event,client,SenderID,args){
         var keyword = args
         var bitrates = [48,64,70,128,160,256]
         let senderId

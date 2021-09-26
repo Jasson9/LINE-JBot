@@ -50,10 +50,16 @@ console.log(event)
       IDS[SenderID]={
         "PREFIX":PREFIX,
         "SEARCH_ENGINE":SEARCH_ENGINE,
-        "CBSTATUS":CBSTATUS
+        "CBSTATUS":CBSTATUS,
+        "HANGMAN":{
+        },
+        "SEARCH":{
+        }
       }
     }
   var args = event.message.text.split(" ");
+  if (args[0][0]!=IDS[SenderID].PREFIX){
+    console.log(args[0][0])
      commands.forEach(name=>{
        try{
         var command = require(`./commands/${name}.js`); 
@@ -61,7 +67,7 @@ console.log(event)
        }catch (error) {
           console.log(error)}
      })
-  
+    }
   var cmd = args.shift().replace(IDS[SenderID].PREFIX,"").toLowerCase();
   if(!event.message.text.slice(0).includes(`${IDS[SenderID].PREFIX}`)){cmd=undefined//if the message has no prefix then use the chatbot if on and return no command
   if(IDS[SenderID].CBSTATUS=="on"&&event.message.text&&event.message.text[0]!=IDS[SenderID].PREFIX){
@@ -69,7 +75,6 @@ console.log(event)
     fetch(`http://api.brainshop.ai/get?bid=159876&key=7wWuHwap2Xeh0eaE&uid=${event.source.userId}&msg=${encodeURIComponent(event.message.text)}`)
     .then(res=> res.json())
     .then(data=>{
-      console.log(data)
       client.replyMessage(event.replyToken,{type:"text",text:data.cnt})
     })
       }}

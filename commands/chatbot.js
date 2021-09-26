@@ -4,7 +4,6 @@ description:"toogle on and off chatbot",
 usage(SenderID){return `${IDS[SenderID].PREFIX}chatbot on \n${IDS[SenderID].PREFIX}chatbot off`},
 exec(event,client,SenderID,args){
   var ID = IDS[SenderID]
-  console.log(args[0])
     //switch on or off for the AI chatbot
     switch(args[0]){
       case "off":
