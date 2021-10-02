@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require("path");
 var { IDS } = require('../util');
-const data= fs.readFileSync(path.join(__dirname,"../","res","wordlist.txt"),"utf-8").toString()
-const wordlist = data.split(',\r\n')
+var data= fs.readFileSync(path.join(__dirname,"../","res","wordlist.txt"),"utf8").toString()
+var wordlist = data.split(',')
 var CSID =  []
 function check(characters){
 var chars = characters
