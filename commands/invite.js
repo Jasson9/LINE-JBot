@@ -9,7 +9,8 @@ module.exports={
             headers:{Authorization: `Bearer ${CHANNEL_ACCESS_TOKEN}`
           }}).then(res=>res.json()).then(data=>{
             BotId=JSON.parse(JSON.stringify(data.basicId).replace("@",""));
+            client.replyMessage(event.replyToken,{type:'text',text:`To invite/add this bot use this url: \n https://line.me/R/ti/p/%40${BotId}`});
             })
-        client.replyMessage(event.replyToken,{type:'text',text:`To invite/add this bot use this url: \n https://line.me/R/ti/p/%40${BotId}`});
+        
     }
 }
