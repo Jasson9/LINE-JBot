@@ -9,3 +9,12 @@ deploy it easily using heroku button 👆👆👆 or fork the repo and deploy it
 ## requirements:
 - LINE channel secret [refer to LINE API Documentation](https://developers.line.biz/en/glossary/#channel-secret)
 - LINE channel access token [refer to LINE API Documentation](https://developers.line.biz/en/reference/messaging-api/#channel-access-token)
+- Webhook endpoint [refer to LINE Messaging API Documentation](https://developers.line.biz/en/reference/messaging-api/#webhooks)
+
+## webhook endpoint 
+* for heroku : https://(your app name).herokuapp.com/webhook
+* for self deployment : https://(your domain)/webhook
+
+## note  
+- webhook endpoint should be https with valid certificate
+- bot's response mode should be bot you can change it at [Line Official Account manager](https://manager.line.biz/)setting
