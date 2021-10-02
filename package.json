@@ -8,13 +8,18 @@
   "test": "echo \"Error: no test specified\" && exit 1"
  },
  "dependencies": {
-  "@line/bot-sdk": "^7.2.0",
+  "@line/bot-sdk": "^7.4.0",
+  "cheerio": "^1.0.0-rc.6",
   "crypto": "^1.0.1",
   "curl": "^0.1.4",
   "express": "^4.17.1",
+  "google-image-search": "^0.1.0",
   "google-images": "^2.1.0",
   "got": "^9.6.0",
   "node-fetch": "^2.6.1",
-  "unirest": "^0.6.0"
+  "unirest": "^0.6.0",
+  "yandex-images": "^1.0.7",
+  "yt-search": "^2.10.1",
+  "ytdl-core": "^4.9.1"
  }
 }
