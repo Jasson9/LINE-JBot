@@ -1,4 +1,4 @@
-# LINE-Bot
+# LINE-JBot
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 LINE-Jbot is a simple LINE bot coded in Node.js(javascript) with few features like Music downloader, images search and chatbot.
