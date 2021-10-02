@@ -55,7 +55,7 @@ var event=JSON.parse(JSON.stringify(data));
           ENGINE:SEARCH_ENGINE,
           LANG:"EN"
         },
-        "JUMBLE":{},
+        "JUMBLE":{}
       }
     }
   var args = event.message.text.split(" ");

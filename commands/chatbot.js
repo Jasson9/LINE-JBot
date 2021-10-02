@@ -14,7 +14,7 @@ exec(event,client,SenderID,args){
         ID.CBSTATUS="on"
         client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is now on`});
         break;
-      default : client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is ${ID.CHATBOT}`});return
+      default : client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is ${ID.CBSTATUS}`});return
     }
 },
 set(event,client,SenderID,args){
