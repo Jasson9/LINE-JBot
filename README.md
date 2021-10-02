@@ -1,7 +1,7 @@
 # LINE-Bot
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-LINE-Jbot is a simple LINE bot coded in Node.js(javascript) with few features like Music downloader, images search and chatbot (deprecated🚫).
+LINE-Jbot is a simple LINE bot coded in Node.js(javascript) with few features like Music downloader, images search and chatbot.
 you can play Jumble Words and hangman also with the bot
 
 deploy it easily using heroku button 👆👆👆 or fork the repo and deploy it by yourself.
@@ -18,3 +18,4 @@ deploy it easily using heroku button 👆👆👆 or fork the repo and deploy it
 ## note  
 - webhook endpoint should be https with valid certificate
 - bot's response mode should be bot you can change it at [Line Official Account manager](https://manager.line.biz/)setting
+- for self deployment you can change default bot settings at [config.json](./config.json)
