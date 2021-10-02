@@ -35,7 +35,7 @@ app.post('/webhook', line.middleware(lineconfig), (req, res) => {
 // event handlers
 function handleEvent(data) {
 var event=JSON.parse(JSON.stringify(data));
-console.log(event)
+//console.log(event)
   if (event.type !== 'message' || event.message.type !== 'text') {
     // ignore non-text-message event
     return Promise.resolve(null);
@@ -46,23 +46,26 @@ console.log(event)
         }else{
           SenderID=event.source.userId
         }
-    if(!IDS[SenderID]){
+    if(!IDS[SenderID]||IDS[SenderID]==undefined){
       IDS[SenderID]={
         "PREFIX":PREFIX,
-        "SEARCH_ENGINE":SEARCH_ENGINE,
         "CBSTATUS":CBSTATUS,
-        "HANGMAN":{
-        },
+        "HANGMAN":{},
         "SEARCH":{
-        }
+          ENGINE:SEARCH_ENGINE,
+          LANG:"EN"
+        },
+        "JUMBLE":{},
       }
     }
   var args = event.message.text.split(" ");
   if (args[0][0]!=IDS[SenderID].PREFIX){
-    console.log(args[0][0])
      commands.forEach(name=>{
        try{
-        var command = require(`./commands/${name}.js`); 
+        var command = require(`./commands/${name}.js`);
+        if(typeof command.opt!=='function'){
+          return
+        } 
         command.opt(event,client,SenderID,args);
        }catch (error) {
           console.log(error)}

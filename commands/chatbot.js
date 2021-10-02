@@ -1,7 +1,7 @@
 var {IDS} = require('../util');
 module.exports={
 description:"toogle on and off chatbot",
-usage(SenderID){return `${IDS[SenderID].PREFIX}chatbot on \n${IDS[SenderID].PREFIX}chatbot off`},
+usage(prefix){return `${prefix}chatbot on \n${prefix}chatbot off`},
 exec(event,client,SenderID,args){
   var ID = IDS[SenderID]
     //switch on or off for the AI chatbot
@@ -16,6 +16,9 @@ exec(event,client,SenderID,args){
         break;
       default : client.replyMessage(event.replyToken,{type:'text',text:`the AI chatbot is ${ID.CHATBOT}`});return
     }
-},opt(){return}
+},
+set(event,client,SenderID,args){
+  this.exec(event,client,SenderID,args)
+}
 
 }

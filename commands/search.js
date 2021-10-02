@@ -84,12 +84,14 @@ function correctFuzzyData (titles, descriptions, urls) {
 }
 
 module.exports={
-  description:"search use google",
-  usage(SenderID){
-      return `${IDS[SenderID].PREFIX}search <keyword>`
+  description:"search using google",
+  usage(prefix){
+      return `${prefix}search <keyword>`
       },
   exec(event,client,SenderID,args){
   var ID = IDS[SenderID]
+  if(!args[0]){client.replyMessage(event.replyToken,{type:'text',text:"no keyword"})
+              ;return}
   var keyword = args.join(" ")
   if(!ID.SEARCH.LANG){
     ID.SEARCH.LANG="en"
@@ -103,7 +105,7 @@ module.exports={
     const options = {
       page: page||0, 
       additional_params: { 
-        hl: 'en' 
+        hl: ID.SEARCH.LANG 
       }
     }
 const response = await search(keyword, options);
@@ -117,8 +119,23 @@ const response = await search(keyword, options);
     client.replyMessage(event.replyToken,{type:'text',text:`${preview.join('\n')}`})
   }
   start();
-  },
-  opt(){
+  },set(event,client,SenderID,args){
+    var ID = IDS[SenderID]
+    var description =`available arguments :\nlanguange <languange>\nnote: (recomended to use 2 characters at languange ex:EN)`
+    switch (args[0]) {
+      case 'languange':
+        if(!args[1]){
+          client.replyMessage(event.replyToken,{type:'text',text:`languange not specified\ncurrent languange is ${ID.SEARCH.LANG}`})
+          break
+        }
+        client.replyMessage(event.replyToken,{type:'text',text:`languange has been changed to ${args[1]}`})
+        ID.SEARCH.LANG=args[1]
+        break;
+    
+      default:
+        client.replyMessage(event.replyToken,{type:'text',text:description})
+        break;
+    }
 
   }
   

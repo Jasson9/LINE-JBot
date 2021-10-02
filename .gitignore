@@ -108,3 +108,4 @@ ignored/
 key.pem
 cert.pem
 test.js
+.vscode

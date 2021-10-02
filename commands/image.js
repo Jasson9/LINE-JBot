@@ -4,8 +4,8 @@ const axios = require("axios");
 const pictformats=[".png",".jpeg",".jpg",".gif",".webp"]
 module.exports={
   description:"send image to chat",
-  usage(SenderID){
-    return`\n${IDS[SenderID].PREFIX}image <keyword> <optional parameters(can be leave blank)>\n\noptional parameters: -e <search engine>\navailable search engine: google and yandex`
+  usage(prefix){
+    return`\n${prefix}image <keyword> <optional parameters(can be leave blank)>\n\noptional parameters: -e <search engine>\navailable search engine: google and yandex`
     },
   exec(event,client,SenderID,args){
     var ID = IDS[SenderID]
@@ -20,7 +20,7 @@ module.exports={
             keyword[index+1]=""
             }
           keyword =  keyword.join("  ");
-          var engine = overrideengine? overrideengine:ID.SEARCH_ENGINE
+          var engine = overrideengine? overrideengine:ID.SEARCH.ENGINE
           if(engine=="yandex"||engine=="google"){
           }else{
             client.replyMessage(event.replyToken,{type:'text', text:"search engine not available"});
@@ -74,5 +74,28 @@ module.exports={
           }  
           catch(err){if(err){
             console.log(err)}}
-      },opt(){return}
+      }
+,set(event,client,SenderID,args){
+        var ID = IDS[SenderID]
+        var description = `available arguments :\nsearchengine (google/yandex)\n\nexample:\n${ID.PREFIX}setting image searchengine google`
+        switch (args[0]) {
+            case 'searchengine':
+                if(args[1]==null){
+                    client.replyMessage(event.replyToken,{type:'text',text:`search engine not specified\ncurrent timer ${ID.SEARCH.ENGINE}`})
+                    break
+                }
+                if(args[1]!='google'||'yandex'){
+                    client.replyMessage(event.replyToken,{type:'text',text:'search engine not exist'})
+                    break
+                }else{
+                    client.replyMessage(event.replyToken,{type:'text',text:`search engine has been changed to ${args[1]}`})
+                    ID.JUMBLE.TIME = args[1]
+                }
+                break;
+        
+            default:
+                client.replyMessage(event.replyToken,{type:'text',text:description})
+                break;
+        }
+    }
   }
