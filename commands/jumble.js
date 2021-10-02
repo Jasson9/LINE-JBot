@@ -66,10 +66,7 @@ module.exports={
     var SID=Math.floor(Math.random()*1000000)
     ID.JUMBLE.SID=SID
     CSID.push(SID);
-console.log('here')
-console.log(wordlist)
     while(results.length<=60){
-        //console.log(results.length)
         characters = generate()
         results = check(characters)
     }
