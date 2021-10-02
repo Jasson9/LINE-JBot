@@ -66,7 +66,9 @@ module.exports={
     var SID=Math.floor(Math.random()*1000000)
     ID.JUMBLE.SID=SID
     CSID.push(SID);
-    while(results.length<=60){
+console.log('here')
+    while(results.length<=40){
+        console.log(results.length)
         characters = generate()
         results = check(characters)
     }
