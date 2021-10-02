@@ -32,7 +32,7 @@ var wordId=Math.floor(Math.random()*wordlist.length)
 var SID=Math.floor(Math.random()*1000000)
 ID.HANGMAN.SID=SID
 CSID.push(SID);
-var word = wordlist[wordId].trimStart()
+var word = wordlist[wordId]
 var order = []
 var i =0
 ID.HANGMAN.WORD=word
