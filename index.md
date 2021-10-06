@@ -1,5 +1,5 @@
 # LINE-JBot
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2FJasson9%2FLINE-JBot&template=https%3A%2F%2Fgithub.com%2FJasson9%2FLINE-JBot)
 
 LINE-Jbot is a simple LINE bot coded in Node.js(javascript) with few features like Music downloader, images search and chatbot.
 you can play Jumble Words and hangman also with the bot
