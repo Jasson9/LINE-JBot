@@ -1,0 +1,29 @@
+{
+    "name": "LINE-JBot",
+    "description": "A simple LINE bot using Node.js",
+    "repository": "https://github.com/Jasson9/LINE-Bot/",
+    "keywords": ["LINE", "Bot", "Node.js","Javascript","JBot","JZ9"],
+    "buildpacks": [{"url":"heroku/node.js"}],
+    "env":{
+        "PREFIX":{
+            "description":"symbol to initiate the bot command. if leaved blank it will use point(.) as the prefix",
+            "required":false   
+        },
+        "BOTNAME":{
+            "description":"name of your bot",
+            "required":true
+        },
+        "ACCESS_TOKEN":{
+            "description":"LINE channel access token for the bot (read LINE API documentation for more info)",
+            "required":true
+        },
+        "CHANNEL_SECRET":{
+            "description":"LINE Channel secret code for the bot (read LINE API documentation for more info)",
+            "required":true
+        },
+        "SEARCH_ENGINE":{
+            "descrption":"image search engine to use ( google / yandex)",
+            "required":false
+        }
+        }
+  }
