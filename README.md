@@ -19,5 +19,6 @@ deploy it easily using heroku button 👆👆👆 or fork the repo and deploy it
 - webhook endpoint should be https with valid certificate
 - bot's response mode should be bot you can change it at [LINE Official Account manager](https://manager.line.biz/) setting
 - for self deployment you can change default bot settings at [config.json](./config.json)
+- some features won't work properly if you've already reached pushMessage quota limit
 
 invite JBot to your LINE chat using this link : [here](https://line.me/R/ti/p/%40188fmzkm)

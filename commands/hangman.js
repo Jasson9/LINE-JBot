@@ -148,7 +148,7 @@ var ID = IDS[SenderID]
         if(ID.HANGMAN.WORD==args[0]){
         client.getProfile(event.source.userId)
             .then((profile) => {
-            client.pushMessage(SenderID,{type:'text',text:`${profile.displayName} get the correct answer`})
+            client.replyMessage(event.replyToken,{type:'text',text:`${profile.displayName} get the correct answer`})
             })
         CSID.splice(CSID.indexOf(ID.HANGMAN.SID),1)
         ID.HANGMAN.SID=undefined
@@ -158,7 +158,7 @@ var ID = IDS[SenderID]
             return
         }
         if(ID.HANGMAN.WORD!=args[0]){
-            client.pushMessage(SenderID,{type:'text',text:"incorrect answer"})
+            client.replyMessage(event.replyToken,{type:'text',text:"incorrect answer"})
         }
         }
     }

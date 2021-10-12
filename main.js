@@ -52,6 +52,9 @@ var event=JSON.parse(JSON.stringify(data));
         "CBSTATUS":CBSTATUS,
         "HANGMAN":{},
         "SEARCH":{
+          ID:"",
+          KEYWORD:"",
+          PAGE:1,
           ENGINE:SEARCH_ENGINE,
           LANG:"EN"
         },
@@ -89,7 +92,7 @@ var event=JSON.parse(JSON.stringify(data));
       }
   } catch (error) {
     console.log(error)
-    client.pushMessage(SenderID,{type:'text', text:"an error occured"});
+    client.replyMessage(event.replyToken,{type:'text', text:"an error occured"});
   }
       }) 
     };

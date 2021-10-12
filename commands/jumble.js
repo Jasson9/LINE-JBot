@@ -123,7 +123,7 @@ opt(event,client,SenderID,args){
                 ID.JUMBLE.SCORE[ID.JUMBLE.NAMES.indexOf(name)]=ID.JUMBLE.SCORE[ID.JUMBLE.NAMES.indexOf(name)]+word.length
             }
             ID.JUMBLE.WORDS.splice(ID.JUMBLE.WORDS.indexOf(word.join('')),1)
-            client.pushMessage(SenderID,{type:'text',text:`${name} ⭕ \n${word.join('')}(+${word.length} points)`})
+            client.replyMessage(event.replyToken,{type:'text',text:`${name} ⭕ \n${word.join('')}(+${word.length} points)`})
         })  
     }
 },
