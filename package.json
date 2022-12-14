@@ -12,7 +12,7 @@
   "cheerio": "^1.0.0-rc.6",
   "crypto": "^1.0.1",
   "curl": "^0.1.4",
-  "express": "^4.17.1",
+  "express": "^4.17.3",
   "google-image-search": "^0.1.0",
   "google-images": "^2.1.0",
   "got": "^11.8.5",
