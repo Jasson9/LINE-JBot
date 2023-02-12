@@ -15,7 +15,7 @@
   "express": "^4.17.1",
   "google-image-search": "^0.1.0",
   "google-images": "^2.1.0",
-  "got": "^11.8.5",
+  "got": "^12.5.3",
   "node-fetch": "^2.6.1",
   "unirest": "^0.6.0",
   "yandex-images": "^1.0.7",
